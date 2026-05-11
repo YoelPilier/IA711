@@ -1,0 +1,7 @@
+jupyter
+ipykernel
+notebook
+pillow
+matplotlib
+datasets
+numpy
