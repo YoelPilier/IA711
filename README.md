@@ -10,3 +10,4 @@
 
 - [Clase 1](./clase_1/clase-1.md)
 - [Clase 2](./clase_2/clase-2.md)
+- [Clase 3](./clase_3/clase-3.md)
