@@ -195,3 +195,22 @@ $$w_{t+1} = w_t - v_{t+1}$$
 
 >Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors. *Nature*, 323(6088), 533-536. 
 
+___
+
+# Nesterov Accelerated Gradient (NAG):
+
+
+![bg  left:40% width:96% ](imagenes/nesterov.png)
+
+$$v_{t+1} = \gamma v_t + \eta \nabla L(w_t - \gamma v_t)$$
+
+$$w_{t+1} = w_t - v_{t+1}$$
+
+versión eficiente:
+
+```text
+v = momentum * v + g
+update = g + momentum * v
+theta = theta - lr * update
+```
+> Sutskever et al. (2013), On the importance of initialization and momentum in deep learning.
