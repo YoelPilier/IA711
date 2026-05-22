@@ -180,6 +180,23 @@ $$\sigma'(z) = \sigma(z)(1 - \sigma(z))$$
 **Entrada:** $\frac{\partial L}{\partial x} = \delta \cdot W$
 
 ---
+# Gradientes Matriciales
+
+![bg  left:30% width:96% ](imagenes/gradientes.png)
+
+**Gradientes de los parámetros:**
+
+**Pesos:**
+$$\frac{\partial L}{\partial W} = X^T \delta$$
+
+**Sesgo:**
+$$\frac{\partial L}{\partial b} = \sum_{i=1}^{B} \delta_i$$
+
+**Entrada:**
+$$\frac{\partial L}{\partial X} = \delta W^T$$
+
+---
+
 # Optimización
 
 ![bg  left:40% width:96% ](imagenes/optimizacion.png)
