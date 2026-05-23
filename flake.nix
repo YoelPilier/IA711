@@ -26,9 +26,10 @@
               jupyter
               ipykernel
               notebook
-                pillow
+              pillow
               matplotlib
-
+              torch
+              numpy
               datasets
             ]))
           pkgs.fish
