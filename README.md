@@ -8,9 +8,20 @@
 
 ## Contenido
 
-- [Clase 1](./clase_1/clase-1.md)
-- [Clase 2](./clase_2/clase-2.md)
-- [Clase 3](./clase_3/clase-3.md)
+- [Clase 1](./clase_1/clase-1.md) - Inteligencia Artificial: Conceptos básicos e historia
+- [Clase 2](./clase_2/clase-2.md) - Agentes inteligentes
+- [Clase 3](./clase_3/clase-3.md) - Machine Learning y Redes Neuronales
+
+## Guías
+
+- [Python](./guias/guia-python.md)
+- [Markdown](./guias/guia-markdown.md)
+- [Gradio](./guias/guia-gradio.md)
+- [Pandas](./guias/guia-pandas.md)
+- [Numpy](./guias/guia-numpy.md)
+- [Matplotlib](./guias/guia-matplotlib.md)
+- [Pytorch](./guias/pytorch.md)
+
 
 
 ### Para los diagramas y dibujos
