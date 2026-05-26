@@ -11,6 +11,8 @@ lang: es-ES
 
 ## Guia de Pandas
 
+[Documentación oficial de Pandas](https://pandas.pydata.org/docs/)
+
 ### Yoel Andeyci Pilier Martinez
 
 #### [yapmartinez@oymas.edu.do](mailto:yapmartinez@oymas.edu.do)

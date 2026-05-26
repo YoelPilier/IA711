@@ -11,6 +11,8 @@ lang: es-ES
 
 ## Guia de PyTorch
 
+[Documentación oficial de PyTorch](https://pytorch.org/docs/stable/)
+
 ### Yoel Andeyci Pilier Martinez
 
 #### [yapmartinez@oymas.edu.do](mailto:yapmartinez@oymas.edu.do)
