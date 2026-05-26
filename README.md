@@ -29,3 +29,8 @@
 ### Para los diagramas y dibujos
 
 - [excalidraw](https://excalidraw.com/)
+
+
+### Tensor Flow Playground
+
+- [Tensor Flow Playground](https://playground.tensorflow.org/)
