@@ -21,7 +21,7 @@
 - [Pandas](./guias/guia-pandas.md)
 - [Numpy](./guias/guia-numpy.md)
 - [Matplotlib](./guias/guia-matplotlib.md)
-- [Pytorch](./guias/pytorch.md)
+- [Pytorch](./guias/guia-pytorch.md)
 
 
 
