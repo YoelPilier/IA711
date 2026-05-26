@@ -11,7 +11,8 @@
 - [Clase 1](./clase_1/clase-1.md) - Inteligencia Artificial: Conceptos básicos e historia
 - [Clase 2](./clase_2/clase-2.md) - Agentes inteligentes
 - [Clase 3](./clase_3/clase-3.md) - Machine Learning y Redes Neuronales
-
+    -[Pizarra de la clase 3](./clase_3/clase_3.excalidraw)
+    -[Código de ejemplo de la clase 3](./clase_3/codigo)
 ## Guías
 
 - [Python](./guias/guia-python.md)

@@ -30,6 +30,7 @@
               matplotlib
               torch
               numpy
+              tqdm
               datasets
             ]))
           pkgs.fish
