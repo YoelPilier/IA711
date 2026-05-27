@@ -13,6 +13,11 @@
 - [Clase 3](./clase_3/clase-3.md) - Machine Learning y Redes Neuronales
     - [Pizarra de la clase 3](./clase_3/clase_3.excalidraw)
     - [Código de ejemplo de la clase 3](./clase_3/codigo)
+- [Clase 4](./clase_4/clase-4.md) - Entrenamiento de modelos  
+
+
+## Prácticas 
+
 
 ## Guías
 
@@ -34,3 +39,21 @@
 ### Tensor Flow Playground
 
 - [Tensor Flow Playground](https://playground.tensorflow.org/)
+
+
+## Dudas y soporte
+
+Antes de abrir una nueva pregunta, revisa primero las **issues existentes**, ya que tu duda podría haber sido resuelta:
+
+- [Preguntas](https://github.com/YoelPilier/IA711/issues)
+
+Si no encuentras una respuesta, entonces abre una nueva issue asegurándote de incluir:
+
+- La clase o tema relacionado (o cualquier duda general de la asignatura)
+- Una descripción clara y específica del problema  
+- Código, error o capturas si aplica  
+- El contexto necesario para poder reproducir la situación  
+
+Las preguntas duplicadas o sin revisar el historial de issues pueden ser referidas a discusiones ya existentes.
+
+Esto ayuda a mantener el curso organizado, facilita el aprendizaje colectivo y mejora el seguimiento académico de las dudas.
