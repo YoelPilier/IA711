@@ -1,10 +1,15 @@
-# Material para la clase de Inteligencia Artificial 711. 
+# Material para la clase de Inteligencia Artificial 711 
+
 
 ## Yoel Andeyci Pilier Martinez
 
 ### [yapmartinez@oymas.edu.do](mailto:yapmartinez@oymas.edu.do)
 
 > “Desprecia la teoría que no se pueda aplicar y la práctica que no tenga base científica.”
+
+<p align="center">
+  <img src="./assets/banner.png" alt="Banner del curso">
+</p>
 
 ## Contenido
 
@@ -16,9 +21,6 @@
 - [Clase 4](./clase_4/clase-4.md) - Entrenamiento de modelos  
 
 
-## Prácticas 
-
-
 ## Guías
 
 - [Python](./guias/guia-python.md)
@@ -27,19 +29,7 @@
 - [Pandas](./guias/guia-pandas.md)
 - [Numpy](./guias/guia-numpy.md)
 - [Matplotlib](./guias/guia-matplotlib.md)
-- [Pytorch](./guias/guia-pytorch.md)
-
-
-
-### Para los diagramas y dibujos
-
-- [excalidraw](https://excalidraw.com/)
-
-
-### Tensor Flow Playground
-
-- [Tensor Flow Playground](https://playground.tensorflow.org/)
-
+- [PyTorch](./guias/guia-pytorch.md)
 
 ## Dudas y soporte
 
@@ -54,6 +44,14 @@ Si no encuentras una respuesta, entonces abre una nueva issue asegurándote de i
 - Código, error o capturas si aplica  
 - El contexto necesario para poder reproducir la situación  
 
-Las preguntas duplicadas o sin revisar el historial de issues pueden ser referidas a discusiones ya existentes.
 
-Esto ayuda a mantener el curso organizado, facilita el aprendizaje colectivo y mejora el seguimiento académico de las dudas.
+### Para los diagramas y dibujos
+
+- [excalidraw](https://excalidraw.com/)
+
+
+### Tensor Flow Playground
+
+- [Tensor Flow Playground](https://playground.tensorflow.org/)
+
+
