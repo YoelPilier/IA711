@@ -19,6 +19,7 @@
     - [Pizarra de la clase 3](./clase_3/clase_3.excalidraw)
     - [Código de ejemplo de la clase 3](./clase_3/codigo)
 - [Clase 4](./clase_4/clase-4.md) - Entrenamiento de modelos  
+    - [Pizarra de la clase 4](./clase_4/clase_4.excalidraw)
     - [Código de ejemplo de la clase 4](./clase_4/codigo)
 
 ## Guías
