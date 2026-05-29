@@ -33,7 +33,7 @@ lang: es-ES
 
 ![bg  left:40% width:96% ](imagenes/datos.png)
 
-- Optener los datos
+- Obtener los datos
 - Preprocesar los datos
 - Dividir los datos en conjuntos de entrenamiento, validación y/o prueba
 --- 

@@ -56,13 +56,9 @@ for i in range(epocas):
     # %%
     learning_rate = 1e-1  # 1e-2, 1e-3, 1e-4
     momentum = 0.9
-    # momentum
+
     wm = momentum * wm + d_w
     bm = momentum * bm + d_b
-
-    # nesterov momentum
-    wm = d_w + momentum * wm
-    bm = d_b + momentum * bm
 
     w -= learning_rate * wm
     b -= learning_rate * bm
