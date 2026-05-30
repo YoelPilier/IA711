@@ -7,3 +7,4 @@ datasets
 numpy
 torch
 tqdm
+safetensors

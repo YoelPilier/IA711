@@ -32,6 +32,7 @@
               numpy
               tqdm
               datasets
+              safetensors
             ]))
           pkgs.fish
         ];
