@@ -33,6 +33,8 @@
               tqdm
               datasets
               safetensors
+              torchmetrics
+              torchvision
             ]))
           pkgs.fish
         ];
