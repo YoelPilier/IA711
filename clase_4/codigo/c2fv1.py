@@ -128,10 +128,10 @@ class Tdataset(Dataset):
         return self.x[idx], self.y[idx]
 
 
-train_dataset = Tdataset(normalized_train_x, normalized_train_y)
-test_dataset = Tdataset(normalized_test_x, normalized_test_y)
-# train_dataset = Tdataset(data_train_x, data_train_y)
-# test_dataset = Tdataset(data_test_x, data_test_y)
+# train_dataset = Tdataset(normalized_train_x, normalized_train_y)
+# test_dataset = Tdataset(normalized_test_x, normalized_test_y)
+train_dataset = Tdataset(data_train_x, data_train_y)
+test_dataset = Tdataset(data_test_x, data_test_y)
 
 bs = 10
 
@@ -174,12 +174,8 @@ loss_fn = nn.MSELoss()
 model = Model().to(device)
 optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, nesterov=True)
 
-loss_train = []
-loss_test = []
-
 for epoch in range(epochs):
     model.train()
-    actual_loss = 0.0
     for x, y in train_dataloader:
         optimizer.zero_grad()
         x = x.float().unsqueeze(1).to(device)
@@ -189,13 +185,9 @@ for epoch in range(epochs):
 
         loss.backward()
         optimizer.step()
-        actual_loss += loss.item()
-
-    actual_loss /= len(train_dataloader)
-    loss_train.append(actual_loss)
 
     if epoch % 1000 == 0:
-        print(f"Epoch {epoch}, Train Loss: {actual_loss}")
+        print(f"Epoch {epoch}, Loss: {loss.item()}")
 
     model.eval()
     with torch.no_grad():
@@ -209,7 +201,6 @@ for epoch in range(epochs):
             total_loss += loss.item()
 
         avg_loss = total_loss / len(test_dataloader)
-        loss_test.append(avg_loss)
         if epoch % 1000 == 0:
             print(f"Epoch {epoch}, Test Loss: {avg_loss}")
 # %%
