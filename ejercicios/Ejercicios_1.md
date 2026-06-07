@@ -92,14 +92,14 @@ donde (f(x)) es la salida de la función sigmoide.
 
 ## Ejercicio 1
 
-$
+$$
 \hat{y} = x \cdot w + b
-$
+$$
 
 **lr = 0.001**
 
-$
-x=
+$$
+ x=
 \begin{bmatrix}
 0.5636 & 0.7666 \\
 0.1621 & 0.4935 \\
@@ -110,9 +110,9 @@ y=
 -0.9233 \\
 -1.3352 \\
 \end{bmatrix}
-$
+$$
 
-$
+$$
 w=
 \begin{bmatrix}
 1.3696 \\
@@ -123,19 +123,19 @@ b=
 \begin{bmatrix}
 -1.6129 \\
 \end{bmatrix}
-$
+$$
 
 ---
 
 ## Ejercicio 2
 
-$
+$$
 \hat{y} = x \cdot w + b
-$
+$$
 
 **lr = 0.01**
 
-$
+$$
 x=
 \begin{bmatrix}
 -0.3536 & -0.3121 \\
@@ -149,9 +149,9 @@ y=
 -0.5605 \\
 0.5254 \\
 \end{bmatrix}
-$
+$$
 
-$
+$$
 w=
 \begin{bmatrix}
 -0.3536 \\
@@ -162,19 +162,19 @@ b=
 \begin{bmatrix}
 -0.3121 \\
 \end{bmatrix}
-$
+$$
 
 ---
 
 ## Ejercicio 3
 
-$
+$$
 \hat{y} = \text{sigmoid}(x \cdot w + b)
-$
+$$
 
 **lr = 0.1**
 
-$
+$$
 x=
 \begin{bmatrix}
 0.5636 & 0.7666 \\
@@ -186,9 +186,9 @@ y=
 0.9233 \\
 0.3352 \\
 \end{bmatrix}
-$
+$$
 
-$
+$$
 w=
 \begin{bmatrix}
 1.3696 \\
@@ -199,19 +199,19 @@ b=
 \begin{bmatrix}
 -1.6129 \\
 \end{bmatrix}
-$
+$$
 
 ---
 
 ## Ejercicio 4
 
-$
+$$
 \hat{y} = \text{relu}(x \cdot w + b)
-$
+$$
 
 **lr = 0.01**
 
-$
+$$
 x=
 \begin{bmatrix}
 -0.3536 & -0.3121 & 0.8437 \\
@@ -223,9 +223,9 @@ y=
 0.9837 \\
 0.5605 \\
 \end{bmatrix}
-$
+$$
 
-$
+$$
 w=
 \begin{bmatrix}
 -0.3536 \\
@@ -237,19 +237,19 @@ b=
 \begin{bmatrix}
 -0.3121 \\
 \end{bmatrix}
-$
+$$
 
 ---
 
 ## Ejercicio 5
 
-$
+$$
 \hat{y} = \text{sigmoid}(x \cdot w + b)
-$
+$$
 
 **lr = 0.01**
 
-$
+$$
 x=
 \begin{bmatrix}
 0.2 & 0.5 & 0.8 \\
@@ -261,9 +261,9 @@ y=
 0.4 & 0.9 \\
 0.8 & 0.3 \\
 \end{bmatrix}
-$
+$$
 
-$
+$$
 w=
 \begin{bmatrix}
 0.3 & -0.2 \\
@@ -275,19 +275,19 @@ b=
 \begin{bmatrix}
 0.1 & -0.1 \\
 \end{bmatrix}
-$
+$$
 
 ---
 
 ## Ejercicio 6
 
-$
+$$
 \hat{y}=\text{sigmoid}(x \cdot w +b)
-$
+$$
 
 **lr = 0.05**
 
-$
+$$
 x=
 \begin{bmatrix}
 0.3 & 0.7 \\
@@ -301,9 +301,9 @@ y=
 0 & 1 \\
 1 & 1 \\
 \end{bmatrix}
-$
+$$
 
-$
+$$
 W=
 \begin{bmatrix}
 0.6 & -0.4 \\
@@ -314,20 +314,20 @@ b=
 \begin{bmatrix}
 0.1 & -0.2 \\
 \end{bmatrix}
-$
+$$
 
 ---
 
 ## Ejercicio 7
 
-$
+$$
 \hat{y}=\text{ReLU}(x \cdot w +b)
-$
+$$
 
 
 **lr = 0.01**
 
-$
+$$
 x=
 \begin{bmatrix}
 0.1 & 0.5 & 0.7 \\
@@ -345,9 +345,9 @@ y=
 0.9 \\
 0.5 \\
 \end{bmatrix}
-$
+$$
 
-$
+$$
 w=
 \begin{bmatrix}
 0.4 \\
@@ -359,5 +359,5 @@ b=
 \begin{bmatrix}
 0.1 \\
 \end{bmatrix}
-$
+$$
 
