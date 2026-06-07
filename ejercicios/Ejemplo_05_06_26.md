@@ -53,7 +53,9 @@ $$\hat{y} =\begin{bmatrix}-0.3536 \cdot -0.4148 + 0.8437 \cdot 0.2671 +
 \end{bmatrix}$$
 
 
-$$\hat{y} =\begin{bmatrix}-0.9837 \\ -0.5605 \\ \end{bmatrix}$$
+$$\hat{y} =\begin{bmatrix}-0.9837 \\
+-0.5605 \\
+\end{bmatrix}$$
 
 ---
 
@@ -83,9 +85,13 @@ $$\text{MSE}'(\hat{y}) = \frac{1}{2} 2(\hat{y}_i - y_i)$$
 
 $$\text{MSE}'(\hat{y}) = \hat{y}_i - y_i$$
 
-$$\text{MSE}'(\hat{y}) = \begin{bmatrix}-0.9837 - 2.2860 \\ -0.5605 + 0.5254 \\\end{bmatrix}$$
+$$\text{MSE}'(\hat{y}) = \begin{bmatrix}-0.9837 - 2.2860 \\ 
+-0.5605 + 0.5254 \\
+\end{bmatrix}$$
 
-$$\text{MSE}'(\hat{y}) = \begin{bmatrix}-3.2697 \\ -0.0351 \\\end{bmatrix}$$
+$$\text{MSE}'(\hat{y}) = \begin{bmatrix}-3.2697 \\ 
+-0.0351 \\
+\end{bmatrix}$$
 
 ---
 
