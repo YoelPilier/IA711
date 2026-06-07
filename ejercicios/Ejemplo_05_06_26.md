@@ -45,15 +45,16 @@ $$\hat{y} =\begin{bmatrix}-0.3536 & 0.8437 & 0.8841 \\
 -0.4148 \\
 0.2671 \\
 -1.2288 \\
-\end{bmatrix}+\begin{bmatrix}-0.2693\end{bmatrix}$$
+\end{bmatrix} + \begin{bmatrix} -0.2693 \end{bmatrix}$$
 
 $$\hat{y} =\begin{bmatrix}-0.3536 \cdot -0.4148 + 0.8437 \cdot 0.2671 +
 0.8841 \cdot -1.2288 -0.2693\\ 
 -0.3121 \cdot -0.4148 + 0.1697 \cdot 0.2671 + 0.3792 \cdot -1.2288 -0.2693\\
+
 \end{bmatrix}$$
 
 
-$$\hat{y} =\begin{bmatrix}-0.9837 \\-0.5605 \\\end{bmatrix}$$
+$$\hat{y} =\begin{bmatrix}-0.9837 \\ -0.5605 \\ \end{bmatrix}$$
 
 ---
 
