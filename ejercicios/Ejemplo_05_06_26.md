@@ -15,7 +15,7 @@ lang: es-ES
 ---
 # Ejemplo del 05/06/2026
 ## Datos
-$\text {x}=\begin{bmatrix}
+$$\text {x}=\begin{bmatrix}
 -0.3536 & 0.8437 & 0.8841 \\
 -0.3121 & 0.1697 & 0.3792 \\
 \end{bmatrix}
@@ -23,7 +23,7 @@ $\text {x}=\begin{bmatrix}
 \text {y}=\begin{bmatrix}
 2.2860 \\
 -0.5254 \\
-\end{bmatrix}$
+\end{bmatrix}$$
 
 $\text {w}=\begin{bmatrix}
 -0.4148 \\
