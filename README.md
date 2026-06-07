@@ -21,6 +21,8 @@
 - [Clase 4](./clase_4/clase-4.md) - Entrenamiento de modelos  
     - [Pizarra de la clase 4](./clase_4/clase_4.excalidraw)
     - [Código de ejemplo de la clase 4](./clase_4/codigo)
+    - [Ejemplo 05/06/26](./ejercicios/Ejemplo_05_06_26.md)
+    - [Ejercicios 1](./ejercicios/Ejercicios_1.md)
 
 ## Guías
 
