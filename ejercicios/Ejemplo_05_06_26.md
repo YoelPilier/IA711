@@ -85,11 +85,13 @@ $$\text{MSE}'(\hat{y}) = \frac{1}{2} 2(\hat{y}_i - y_i)$$
 
 $$\text{MSE}'(\hat{y}) = \hat{y}_i - y_i$$
 
-$$\text{MSE}'(\hat{y}) = \begin{bmatrix}-0.9837 - 2.2860 \\ 
+$$\text{MSE}'(\hat{y}) = \begin{bmatrix}
+-0.9837 - 2.2860 \\ 
 -0.5605 + 0.5254 \\
 \end{bmatrix}$$
 
-$$\text{MSE}'(\hat{y}) = \begin{bmatrix}-3.2697 \\ 
+$$\text{MSE}'(\hat{y}) = \begin{bmatrix}
+-3.2697 \\ 
 -0.0351 \\
 \end{bmatrix}$$
 
@@ -98,11 +100,11 @@ $$\text{MSE}'(\hat{y}) = \begin{bmatrix}-3.2697 \\
 ## Backpropagation
 # Gradiente del error con respecto al sesgo
 
-$$\nabla{b} = \sum \text{MSE}'$$
+$$\nabla{b} = \sum \text{MSE}' $$
 
-$$\nabla{b} = -3.2697 + -0.0351$$
+$$\nabla{b} = -3.2697 + -0.0351 $$
 
-$$\nabla{b} = -3.3048$$
+$$\nabla{b} = -3.3048   $$
 
 
 ---
@@ -112,17 +114,27 @@ $$\nabla{b} = -3.3048$$
 
 $$\nabla{w} = \text {x}^T \cdot \text{MSE}'$$
 
-$$\nabla{w} = \begin{bmatrix}-0.3536 & -0.3121 \\
+$$\nabla{w} = \begin{bmatrix}
+-0.3536 & -0.3121 \\
 0.8437 & 0.1697 \\
 0.8841 & 0.3792 \\
-\end{bmatrix} \cdot \begin{bmatrix}-3.2697 \\ -0.0351 \\\end{bmatrix}$$
+\end{bmatrix} \cdot 
+\begin{bmatrix}
+-3.2697 \\ 
+-0.0351 \\
+\end{bmatrix}$$
 
-$$\nabla{w} = \begin{bmatrix}-0.3536 \cdot -3.2697 + -0.3121 \cdot -0.0351 \\
+$$\nabla{w} = \begin{bmatrix}
+-0.3536 \cdot -3.2697 + -0.3121 \cdot -0.0351 \\
 0.8437 \cdot -3.2697 + 0.1697 \cdot -0.0351 \\
 0.8841 \cdot -3.2697 + 0.3792 \cdot -0.0351 \\
 \end{bmatrix}$$
 
-$$\nabla{w} = \begin{bmatrix}1.1671 \\ -2.7647 \\ -2.9041 \\\end{bmatrix}$$
+$$\nabla{w} = \begin{bmatrix}
+1.1671 \\ 
+-2.7647 \\ 
+-2.9041 \\
+\end{bmatrix}$$
 
 ---
 
@@ -138,20 +150,34 @@ Donde $$\alpha$$ es el Learning rate (tasa de aprendizaje).
 
 $$\alpha = 0.01$$
 
-$$\text{w} = \begin{bmatrix}-0.4148 \\ 0.2671 \\ -1.2288 \\
-\end{bmatrix} - 0.01 \cdot \begin{bmatrix}1.1671 \\ -2.7647 \\ -2.9041 \\\end{bmatrix}$$
+$$\text{w} = \begin{bmatrix}
+-0.4148 \\ 
+0.2671 \\ 
+-1.2288 \\
+\end{bmatrix} - 0.01 \cdot 
+\begin{bmatrix}1.1671 \\
+-2.7647 \\
+-2.9041 \\
+\end{bmatrix}$$
 
-$$\text{b} = \begin{bmatrix}-0.2693\end{bmatrix} - 0.01 \cdot -3.3048$$
+$$\text{b} = \begin{bmatrix}
+-0.2693
+\end{bmatrix} - 0.01 \cdot -3.3048$$
 
 
 ---
 
 # Resultados después de la actualización
 
-$$\text{w} = \begin{bmatrix}-0.4265 \\ 0.2948 \\ -1.1998 \\
+$$\text{w} = \begin{bmatrix}
+-0.4265 \\
+0.2948 \\ 
+-1.1998 \\
 \end{bmatrix}$$
 
-$$\text{b} = \begin{bmatrix}-0.2363\end{bmatrix}$$
+$$\text{b} = \begin{bmatrix}
+-0.2363
+\end{bmatrix}$$
 
 ---
 
@@ -159,16 +185,26 @@ $$\text{b} = \begin{bmatrix}-0.2363\end{bmatrix}$$
 
 $$\hat{y} =\text {x} \cdot \text {w}+\text {b}$$
 
-$$\hat{y} =\begin{bmatrix}-0.3536 & 0.8437 & 0.8841 \\
+$$\hat{y} =\begin{bmatrix}
+-0.3536 & 0.8437 & 0.8841 \\
 -0.3121 & 0.1697 & 0.3792 \\
-\end{bmatrix} \cdot \begin{bmatrix}-0.4265 \\ 0.2948 \\ -1.1998 \\
-\end{bmatrix}+\begin{bmatrix}-0.2363\end{bmatrix}$$
+\end{bmatrix} \cdot 
+\begin{bmatrix}
+-0.4265 \\ 0.2948 \\ -1.1998 \\
+\end{bmatrix}+
+\begin{bmatrix}
+-0.2363
+\end{bmatrix}$$
 
-$$\hat{y} =\begin{bmatrix}-0.3536 \cdot -0.4265 + 0.8437 \cdot 0.2948 + 0.8841 \cdot -1.1998 -0.2363\\
+$$\hat{y} =\begin{bmatrix}
+-0.3536 \cdot -0.4265 + 0.8437 \cdot 0.2948 + 0.8841 \cdot -1.1998 -0.2363\\
 -0.3121 \cdot -0.4265 + 0.1697 \cdot 0.2948 + 0.3792 \cdot -1.1998 -0.2363\\
 \end{bmatrix}$$
 
-$$\hat{y} =\begin{bmatrix}-0.8976 \\ -0.5082 \\\end{bmatrix}$$
+$$\hat{y} =\begin{bmatrix}
+-0.8976 \\
+-0.5082 \\
+\end{bmatrix}$$
 
 ---
 # Cálculo del error después de la actualización
