@@ -190,10 +190,12 @@ $$\hat{y} =\begin{bmatrix}
 -0.3121 & 0.1697 & 0.3792 \\
 \end{bmatrix} \cdot 
 \begin{bmatrix}
--0.4265 \\ 0.2948 \\ -1.1998 \\
+-0.4265 \\ 
+0.2948 \\ 
+-1.1998 \\
 \end{bmatrix}+
 \begin{bmatrix}
--0.2363
+-0.2363 \\
 \end{bmatrix}$$
 
 $$\hat{y} =\begin{bmatrix}
