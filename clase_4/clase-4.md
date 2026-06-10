@@ -159,7 +159,7 @@ $$MAE = \frac{1}{n} \sum_{i=1}^{n} |\hat{y}_i - y_i|$$
 
 
 - MAE derivada
-$$\text{MAE}' = \frac{1}{n}\,\text{sign}(\hat{y} - y)$$
+$$\text{MAE}' = \frac{1}{n}\cdot\text{sign}(\hat{y} - y)$$
 
 donde:
 
