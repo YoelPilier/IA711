@@ -58,18 +58,17 @@ $$
 \frac{\partial MSE}{\partial \hat y_i}=\frac{2}{N}(\hat y_i-y_i)
 $$
 
-- MAE:
-$$
-\frac{\partial MAE}{\partial \hat y_i}=\frac{1}{N}\cdot\text{sign}(\hat y_i-y_i)
-$$ 
+- MAE derivada
+$$\text{MAE}' = \frac{1}{n}\cdot\text{sign}(\hat{y} - y)$$
 
 donde:
+
 $$
 \text{sign}(x)=
 \begin{cases}
-1 & \text{si } x > 0\
--1 & \text{si } x < 0\
-0 & \text{si } x = 0
++1 & x > 0 \\
+0 & x = 0 \\
+-1 & x < 0
 \end{cases}
 $$
 
@@ -97,6 +96,7 @@ f(x)=\frac{1}{1+2.71828^{-x}}
 $$
 
 - Tanh:
+
 $$
 f(x)=\frac{\exp(x)-\exp(-x)}{\exp(x)+\exp(-x)}
 $$
@@ -124,6 +124,7 @@ $$
 donde (f(x)) es la salida de la función sigmoide.
 
 - Tanh:
+
 $$
 f'(x)=1-f(x)^2
 $$
