@@ -38,6 +38,7 @@ MSE=\frac{1}{N}\sum_{i=1}^{N}(\hat y_i-y_i)^2
 $$
 
 MAE (*Mean Absolute Error*):
+
 $$
 MAE=\frac{1}{N}\sum_{i=1}^{N}|\hat y_i-y_i|
 $$
@@ -54,11 +55,13 @@ donde:
 ### Derivadas de las funciones de pérdida
 
 - MSE:
+
 $$
 \frac{\partial MSE}{\partial \hat y_i}=\frac{2}{N}(\hat y_i-y_i)
 $$
 
 - MAE derivada
+
 $$\text{MAE}' = \frac{1}{n}\cdot\text{sign}(\hat{y} - y)$$
 
 donde:
@@ -130,17 +133,18 @@ f'(x)=1-f(x)^2
 $$
 
 ---
-
 ## Ejercicio 1
 
 $$
-\hat{y} = x \cdot w + b
+\hat{y} = \text{sigmoid}\big(\text{tanh}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
 $$
 
-**lr = 0.001**
+**lr = 0.01**
+
+**loss = MSE**
 
 $$
- x=
+x=
 \begin{bmatrix}
 0.5636 & 0.7666 \\
 0.1621 & 0.4935 \\
@@ -148,21 +152,34 @@ $$
 \qquad
 y=
 \begin{bmatrix}
--0.9233 \\
--1.3352 \\
+0.9233 \\
+0.3352 \\
 \end{bmatrix}
 $$
 
 $$
-w=
+W^{(1)}=
 \begin{bmatrix}
-1.3696 \\
--0.0677 \\ 
+1.0 & -0.5 \\
+0.3 & 0.8 \\
 \end{bmatrix}
 \qquad
-b=
+b^{(1)}=
 \begin{bmatrix}
--1.6129 \\
+-0.2 & 0.1 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.7 \\
+-0.4 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+0.05 \\
 \end{bmatrix}
 $$
 
@@ -171,10 +188,12 @@ $$
 ## Ejercicio 2
 
 $$
-\hat{y} = x \cdot w + b
+\hat{y} = \text{relu}\big(\text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
 $$
 
-**lr = 0.01**
+**lr = 0.005**
+
+**loss = MAE**
 
 $$
 x=
@@ -193,15 +212,28 @@ y=
 $$
 
 $$
-w=
+W^{(1)}=
 \begin{bmatrix}
--0.3536 \\
--0.3121 \\
+-0.2 & 0.6 \\
+0.4 & -0.1 \\
 \end{bmatrix}
 \qquad
-b=
+b^{(1)}=
 \begin{bmatrix}
--0.3121 \\
+0.0 & -0.05 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.3 \\
+-0.7 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+-0.1 \\
 \end{bmatrix}
 $$
 
@@ -210,10 +242,12 @@ $$
 ## Ejercicio 3
 
 $$
-\hat{y} = \text{sigmoid}(x \cdot w + b)
+\hat{y} = \text{tanh}\big(\text{relu}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
 $$
 
-**lr = 0.1**
+**lr = 0.02**
+
+**loss = MSE**
 
 $$
 x=
@@ -224,21 +258,34 @@ x=
 \qquad
 y=
 \begin{bmatrix}
-0.9233 \\
-0.3352 \\
+0.2 \\
+-0.4 \\
 \end{bmatrix}
 $$
 
 $$
-w=
+W^{(1)}=
 \begin{bmatrix}
-1.3696 \\
--0.0677 \\
+1.2 & -0.8 \\
+0.5 & 0.3 \\
 \end{bmatrix}
 \qquad
-b=
+b^{(1)}=
 \begin{bmatrix}
--1.6129 \\
+0.1 & 0.2 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.6 \\
+-0.9 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+0.0 \\
 \end{bmatrix}
 $$
 
@@ -247,10 +294,12 @@ $$
 ## Ejercicio 4
 
 $$
-\hat{y} = \text{relu}(x \cdot w + b)
+\hat{y} = \text{sigmoid}\big(\text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
 $$
 
 **lr = 0.01**
+
+**loss = MAE**
 
 $$
 x=
@@ -267,16 +316,28 @@ y=
 $$
 
 $$
-w=
+W^{(1)}=
 \begin{bmatrix}
--0.3536 \\
--0.3121 \\
-0.8437 \\
+-0.3 & 0.2 & 0.5 \\
+0.1 & -0.4 & 0.7 \\
 \end{bmatrix}
 \qquad
-b=
+b^{(1)}=
 \begin{bmatrix}
--0.3121 \\
+-0.05 & 0.05 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.4 \\
+-0.6 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+0.02 \\
 \end{bmatrix}
 $$
 
@@ -285,10 +346,12 @@ $$
 ## Ejercicio 5
 
 $$
-\hat{y} = \text{sigmoid}(x \cdot w + b)
+\hat{y} = \text{relu}\big(\text{tanh}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
 $$
 
 **lr = 0.01**
+
+**loss = MSE**
 
 $$
 x=
@@ -299,22 +362,35 @@ x=
 \qquad
 y=
 \begin{bmatrix}
-0.4 & 0.9 \\
-0.8 & 0.3 \\
+0.4 \\
+0.8 \\
 \end{bmatrix}
 $$
 
 $$
-w=
+W^{(1)}=
 \begin{bmatrix}
 0.3 & -0.2 \\
 0.7 & 0.4 \\
 -0.5 & 0.8 \\
 \end{bmatrix}
 \qquad
-b=
+b^{(1)}=
 \begin{bmatrix}
 0.1 & -0.1 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.2 \\
+-0.3 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+0.05 \\
 \end{bmatrix}
 $$
 
@@ -323,10 +399,12 @@ $$
 ## Ejercicio 6
 
 $$
-\hat{y}=\text{sigmoid}(x \cdot w +b)
+\hat{y} = \text{tanh}\big(\text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
 $$
 
 **lr = 0.05**
+
+**loss = MAE**
 
 $$
 x=
@@ -338,22 +416,35 @@ x=
 \qquad
 y=
 \begin{bmatrix}
-1 & 0 \\
-0 & 1 \\
-1 & 1 \\
+1 \\
+0 \\
+1 \\
 \end{bmatrix}
 $$
 
 $$
-W=
+W^{(1)}=
 \begin{bmatrix}
 0.6 & -0.4 \\
 0.2 & 0.9 \\
 \end{bmatrix}
 \qquad
-b=
+b^{(1)}=
 \begin{bmatrix}
 0.1 & -0.2 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.5 \\
+-0.1 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+0.0 \\
 \end{bmatrix}
 $$
 
@@ -362,11 +453,12 @@ $$
 ## Ejercicio 7
 
 $$
-\hat{y}=\text{ReLU}(x \cdot w +b)
+\hat{y} = \text{sigmoid}\big(\text{relu}( \text{tanh}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}) \cdot W^{(3)} + b^{(3)}\big)
 $$
 
-
 **lr = 0.01**
+
+**loss = MSE**
 
 $$
 x=
@@ -389,16 +481,206 @@ y=
 $$
 
 $$
-w=
+W^{(1)}=
+\begin{bmatrix}
+0.2 & -0.1 \\
+0.4 & 0.3 \\
+-0.2 & 0.5 \\
+\end{bmatrix}
+\qquad
+b^{(1)}=
+\begin{bmatrix}
+0.0 & 0.05 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.6 & -0.3 \\
+0.1 & 0.4 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+-0.02 & 0.02 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(3)}=
 \begin{bmatrix}
 0.4 \\
 -0.2 \\
-0.7 \\
 \end{bmatrix}
 \qquad
-b=
+b^{(3)}=
 \begin{bmatrix}
 0.1 \\
 \end{bmatrix}
 $$
 
+---
+
+## Ejercicio 8
+
+$$
+\hat{y} = \text{tanh}\big(\text{tanh}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+$$
+
+**lr = 0.02**
+
+**loss = MAE**
+
+$$
+x=
+\begin{bmatrix}
+0.45 & -0.12 \\
+-0.33 & 0.88 \\
+0.77 & 0.05 \\
+\end{bmatrix}
+\qquad
+y=
+\begin{bmatrix}
+0.1 \\
+-0.2 \\
+0.5 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(1)}=
+\begin{bmatrix}
+0.5 & -0.6 \\
+0.2 & 0.3 \\
+\end{bmatrix}
+\qquad
+b^{(1)}=
+\begin{bmatrix}
+0.0 & 0.1 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+-0.4 \\
+0.9 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+-0.05 \\
+\end{bmatrix}
+$$
+
+---
+
+## Ejercicio 9
+
+$$
+\hat{y} = \text{relu}\big(\text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+$$
+
+**lr = 0.005**
+
+**loss = MSE**
+
+$$
+x=
+\begin{bmatrix}
+0.12 & 0.34 & 0.56 \\
+0.78 & 0.90 & 0.11 \\
+0.22 & 0.44 & 0.66 \\
+\end{bmatrix}
+\qquad
+y=
+\begin{bmatrix}
+0.3 \\
+0.7 \\
+0.2 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(1)}=
+\begin{bmatrix}
+0.1 & -0.2 \\
+0.3 & 0.4 \\
+-0.1 & 0.2 \\
+\end{bmatrix}
+\qquad
+b^{(1)}=
+\begin{bmatrix}
+0.01 & -0.01 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.25 \\
+-0.35 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+0.0 \\
+\end{bmatrix}
+$$
+
+---
+
+## Ejercicio 10
+
+$$
+\hat{y} = \text{sigmoid}\big(\text{relu}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+$$
+
+**lr = 0.01**
+
+**loss = MAE**
+
+$$
+x=
+\begin{bmatrix}
+0.33 & 0.66 \\
+0.11 & 0.22 \\
+0.77 & 0.88 \\
+0.44 & 0.55 \\
+\end{bmatrix}
+\qquad
+y=
+\begin{bmatrix}
+1 \\
+0 \\
+1 \\
+0 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(1)}=
+\begin{bmatrix}
+0.6 & -0.3 \\
+0.2 & 0.5 \\
+\end{bmatrix}
+\qquad
+b^{(1)}=
+\begin{bmatrix}
+0.05 & -0.05 \\
+\end{bmatrix}
+$$
+
+$$
+W^{(2)}=
+\begin{bmatrix}
+0.45 \\
+-0.25 \\
+\end{bmatrix}
+\qquad
+b^{(2)}=
+\begin{bmatrix}
+0.02 \\
+\end{bmatrix}
+$$
