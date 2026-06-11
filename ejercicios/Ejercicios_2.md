@@ -18,7 +18,7 @@ lang: es-ES
 Para que un ejercicio se considere resuelto, debe realizar los siguientes pasos con lapiz y papel, y luego implementar el código en Python:
 
 1. Realizar la predicción (*forward pass*).
-2. Calcular el error (*loss*) utilizando MSE (*Mean Squared Error*).
+2. Calcular el error (*loss*) utilizando MSE (*Mean Squared Error*) o MAE (*Mean Absolute Error*).
 3. Calcular las derivadas (*backward pass*).
 4. Actualizar los pesos y el sesgo (*weight and bias update*).
 5. Realizar una nueva predicción (*forward pass*) con los pesos y el sesgo actualizados.
@@ -57,7 +57,7 @@ donde:
 - MSE:
 
 $$
-\frac{\partial MSE}{\partial \hat y_i}=\frac{2}{N}(\hat y_i-y_i)
+\text{MSE}'=\frac{2}{N}(\hat y_i-y_i)
 $$
 
 - MAE derivada
@@ -131,6 +131,14 @@ donde (f(x)) es la salida de la función sigmoide.
 $$
 f'(x)=1-f(x)^2
 $$
+
+
+---
+
+## Como calcular los gradientes con mas de 1 capa
+
+El secreto esta en como calculamos los gradientes de los pesos. Usamos la entrada de la capa transpuesta multiplicada por el gradiente que viene de las capas siguientes. Entonces, lo que vamos a pasar a la capa anterior es el peso de esta capa multiplicado por el gradiente que viene de las capas siguientes y por la derivada de la funcion de activacion. Asi sucesivamente hasta llegar a la primera capa.
+
 
 ---
 ## Ejercicio 1
