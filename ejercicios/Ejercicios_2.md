@@ -101,7 +101,7 @@ $$
 - Tanh:
 
 $$
-f(x)=\frac{\exp(x)-\exp(-x)}{\exp(x)+\exp(-x)}
+f(x)=\frac{\exp(2x)-1}{\exp(2x)+1}
 $$
 
 ---
