@@ -166,14 +166,25 @@ class Model(nn.Module):
 
 # Model()(torch.tensor([[0.0]]).float()).shape
 # %%
-lr = 1e-3
-epochs = 10000
+lr = 1e-1
+epochs = 500
 
 
 loss_fn = nn.MSELoss()
 model = Model().to(device)
 optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, nesterov=True)
 
+MAE = nn.L1Loss()
+
+
+def r_squared(y_true, y_pred):
+    ss_res = torch.sum((y_true - y_pred) ** 2)
+    ss_tot = torch.sum((y_true - torch.mean(y_true)) ** 2)
+    return 1 - (ss_res / ss_tot)
+
+
+mae_test = []
+r2_test = []
 loss_train = []
 loss_test = []
 
@@ -194,10 +205,12 @@ for epoch in range(epochs):
     actual_loss /= len(train_dataloader)
     loss_train.append(actual_loss)
 
-    if epoch % 1000 == 0:
+    if epoch % 100 == 0:
         print(f"Epoch {epoch}, Train Loss: {actual_loss}")
 
     model.eval()
+    mae_epoch = 0.0
+    r2_epoch = 0.0
     with torch.no_grad():
         total_loss = 0
         for x, y in test_dataloader:
@@ -208,8 +221,34 @@ for epoch in range(epochs):
             loss = loss_fn(pred, y)
             total_loss += loss.item()
 
+            mae_epoch += MAE(pred, y).item()
+            r2_epoch += r_squared(y, pred).item()
+
+        avg_mae = mae_epoch / len(test_dataloader)
+        mae_test.append(avg_mae)
+        r2_avg = r2_epoch / len(test_dataloader)
         avg_loss = total_loss / len(test_dataloader)
         loss_test.append(avg_loss)
-        if epoch % 1000 == 0:
-            print(f"Epoch {epoch}, Test Loss: {avg_loss}")
+        if epoch % 100 == 0:
+            print(
+                f"Epoch {epoch}, Test Loss: {avg_loss}, Test MAE: {avg_mae}, R2: {r2_avg}"
+            )
 # %%
+import matplotlib.pyplot as plt
+
+plt.plot(loss_train, label="Train Loss")
+plt.plot(loss_test, label="Test Loss")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.title("Train and Test Loss over Epochs")
+plt.legend()
+plt.savefig("perdida.png")
+plt.show()
+
+plt.plot(mae_test, label="Test MAE")
+plt.xlabel("Epoch")
+plt.ylabel("MAE")
+plt.title("Test MAE over Epochs")
+plt.legend()
+plt.savefig("mae.png")
+plt.show()
