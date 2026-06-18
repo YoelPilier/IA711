@@ -24,6 +24,9 @@
     - [Ejemplo 05/06/26](./ejercicios/Ejemplo_05_06_26.md)
     - [Ejercicios 1](./ejercicios/Ejercicios_1.md)
     - [Ejercicios 2](./ejercicios/Ejercicios_2.md)
+- [Clase 5](./clase_5/clase-5.md) - Visión por computadora, redes convolucionales y Estabilidad del entrenamiento
+    - [Pizarra de la clase 5](./clase_5/clase_5.excalidraw)
+    - [Código de ejemplo de la clase 5](./clase_5/codigo)
 
 ## Guías
 

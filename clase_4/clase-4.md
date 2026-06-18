@@ -15,7 +15,7 @@ lang: es-ES
 ---
 # Entrenamiento de modelos
 
-![w:700](./imagenes/training_loop.png)
+![w:900](./imagenes/training_loop.png)
 
 ---
 
