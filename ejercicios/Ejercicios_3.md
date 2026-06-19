@@ -15,12 +15,12 @@ lang: es-ES
 ---
 # Ejercicios
 
-## 1 Usando los scripts de clasificación de la clase,resuelve estos problemas de clasificación.
+## 1. Usando los scripts de clasificación de la clase,resuelve estos problemas de clasificación.
 
 - zalando-datasets/fashion_mnist
 - tanganke/kmnist
 
-## 2 Para que uno de los siguientes ejercicios se considere resuelto, debe realizar los siguientes pasos con lapiz y papel, y luego implementar el código en Python:
+## 2. Para que uno de los siguientes ejercicios se considere resuelto, debe realizar los siguientes pasos con lapiz y papel, y luego implementar el código en Python:
 
 1. Realizar la predicción (forward pass).
 2. Calcular el error (loss) utilizando la función de pérdida indicada (ahora de clasificación: BCELoss o CrossEntropyLoss).
