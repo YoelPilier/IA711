@@ -27,7 +27,7 @@
 - [Clase 5](./clase_5/clase-5.md) - Visión por computadora, redes convolucionales y Estabilidad del entrenamiento
     - [Pizarra de la clase 5](./clase_5/clase_5.excalidraw)
     - [Código de ejemplo de la clase 5](./clase_5/codigo)
-
+    - [Ejercicios 3](./ejercicios/Ejercicios_3.md)
 ## Guías
 
 - [Python](./guias/guia-python.md)
