@@ -97,11 +97,9 @@ $$
 
 ---
 
-
-## Ejercicio 1 
-
+## Ejercicio 1
 $$
-\hat{y} = \text{sigmoid}\big(\text{tanh}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{tanh}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}
 $$
 
 **lr = 0.01**
@@ -150,11 +148,12 @@ $$
 
 ---
 
-## Ejercicio 2 
+## Ejercicio 2
 
 $$
-\hat{y} = \text{relu}\big(\text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{sigmoid}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}
 $$
+
 
 **lr = 0.005**
 
@@ -204,10 +203,10 @@ $$
 
 ---
 
-## Ejercicio 3 
+## Ejercicio 3
 
 $$
-\hat{y} = \text{tanh}\big(\text{relu}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{ReLU}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}
 $$
 
 **lr = 0.02**
@@ -256,10 +255,9 @@ $$
 
 ---
 
-## Ejercicio 4 
-
+## Ejercicio 4
 $$
-\hat{y} = \text{sigmoid}\big(\text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{sigmoid}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}
 $$
 
 **lr = 0.01**
@@ -308,10 +306,10 @@ $$
 
 ---
 
-## Ejercicio 5 
+## Ejercicio 5
 
 $$
-\hat{y} = \text{relu}\big(\text{tanh}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{tanh}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}
 $$
 
 **lr = 0.01**
@@ -361,10 +359,10 @@ $$
 
 ---
 
-## Ejercicio 6 
+## Ejercicio 6
 
 $$
-\hat{y} = \text{tanh}\big(\text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}
 $$
 
 **lr = 0.05**
@@ -416,10 +414,9 @@ $$
 
 ---
 
-## Ejercicio 7 
-
+## Ejercicio 7
 $$
-\hat{y} = \text{sigmoid}\big(\text{relu}( \text{tanh}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}) \cdot W^{(3)} + b^{(3)}\big)
+\hat{y} = \text{relu}\Big(\text{tanh}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}\Big) \cdot W^{(3)} + b^{(3)}
 $$
 
 **lr = 0.01**
@@ -490,10 +487,9 @@ $$
 
 ---
 
-## Ejercicio 8 
-
+## Ejercicio 8
 $$
-\hat{y} = \text{tanh}\big(\text{tanh}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{tanh}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}
 $$
 
 **lr = 0.02**
@@ -546,10 +542,9 @@ $$
 
 ---
 
-## Ejercicio 9 
-
+## Ejercicio 9
 $$
-\hat{y} = \text{relu}\big(\text{sigmoid}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{sigmoid}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}
 $$
 
 **lr = 0.005**
@@ -601,10 +596,9 @@ $$
 
 ---
 
-## Ejercicio 10 
-
+## Ejercicio 10
 $$
-\hat{y} = \text{sigmoid}\big(\text{relu}(x \cdot W^{(1)} + b^{(1)}) \cdot W^{(2)} + b^{(2)}\big)
+\hat{y} = \text{relu}\big(x \cdot W^{(1)} + b^{(1)}\big) \cdot W^{(2)} + b^{(2)}
 $$
 
 **lr = 0.01**
