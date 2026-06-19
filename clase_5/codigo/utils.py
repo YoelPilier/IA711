@@ -5,44 +5,45 @@ import numpy as np
 import pandas as pd
 
 
-def show_pixels(image):
-    """
-    Muestra los valores de intensidad de cada píxel.
-    """
-
-    img = image.convert("L")
-    pixels = np.array(img)
-
-    return (
-        pd.DataFrame(pixels)
-        .style.set_properties(**{"font-size": "6pt"})
-        .background_gradient(cmap="Greys")
-    )
-
-
 def plot_confusion_matrix(Y_hat, y):
     """
-    Y_hat: Tensor de tamaño (N, C) con logits o probabilidades.
+    Y_hat: Tensor de tamaño (N, C) con logits/probabilidades, o (N,) / (N, 1) para clasificación binaria.
     y: Tensor de tamaño (N,) con las etiquetas verdaderas.
     """
+    # Asegurar que trabajamos en CPU y sin gradientes para graficar
+    Y_hat = Y_hat.detach().cpu()
+    y = y.detach().cpu().long()
 
-    # Predicciones
-    y_pred = torch.argmax(Y_hat, dim=1)
+    # --- CONTROL DE DIMENSIONES (Hacerla genérica) ---
+    # Si viene con forma (N, 1), lo aplanamos a (N,)
+    if Y_hat.ndim == 2 and Y_hat.shape[1] == 1:
+        Y_hat = Y_hat.squeeze(1)
 
-    # Número de clases
-    num_classes = max(y.max(), y_pred.max()).item() + 1
+    if Y_hat.ndim == 1:
+        # Clasificación binaria (1 salida continua)
+        # Si usas Sigmoide usa > 0.5. Si usas logits directos sin activar, usa > 0.
+        # Aquí asumimos > 0 (ideal para logits)
+        y_pred = (Y_hat > 0).long()
+        num_classes = 2
+    else:
+        # Clasificación multiclase (C salidas)
+        y_pred = torch.argmax(Y_hat, dim=1)
+        num_classes = max(y.max(), y_pred.max()).item() + 1
+    # -------------------------------------------------
 
     # Matriz de confusión
     cm = torch.zeros((num_classes, num_classes), dtype=torch.int64)
 
     for t, p in zip(y, y_pred):
-        cm[t, p] += 1
+        # Control por si alguna etiqueta real excede el tamaño esperado
+        if t < num_classes and p < num_classes:
+            cm[t, p] += 1
 
     cm = cm.numpy()
 
-    # Mostrar
+    # Mostrar gráfico
     fig, ax = plt.subplots(figsize=(6, 6))
-    im = ax.imshow(cm)
+    im = ax.imshow(cm, cmap="Blues")  # Un mapa de color azul suele verse más limpio
 
     plt.colorbar(im)
 
@@ -53,7 +54,7 @@ def plot_confusion_matrix(Y_hat, y):
     ax.set_xticks(range(num_classes))
     ax.set_yticks(range(num_classes))
 
-    # Escribir los valores
+    # Escribir los valores dentro de las celdas
     for i in range(num_classes):
         for j in range(num_classes):
             ax.text(
