@@ -6,11 +6,12 @@ __pycache__/
 *.htm
 # C extensions
 *.so
-
+clase_5/codigo/*.png
 # Distribution / packaging
 .Python
 build/
 develop-eggs/
+monitor_logs/
 dist/
 downloads/
 eggs/
