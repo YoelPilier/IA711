@@ -188,7 +188,7 @@ $$
 - Su rendimiento disminuye cuando el batch es muy pequeño.
 
 ---
-###Derivada de Batch Normalization</summary>
+### Derivada de Batch Normalization</summary>
 
 Sea
 
@@ -204,10 +204,8 @@ $$
 \frac{\gamma}{m\sqrt{\sigma^2+\epsilon}}
 \left[
 m\delta_i
--
-\sum_j\delta_j
--
-\hat{x}_i
+- \sum_j\delta_j
+- \hat{x}_i
 \sum_j
 \delta_j\hat{x}_j
 \right]
@@ -217,14 +215,12 @@ Además,
 
 $$
 \frac{\partial L}{\partial\gamma}
-=
-\sum_i\delta_i\hat{x}_i
+= \sum_i\delta_i\hat{x}_i
 $$
 
 $$
 \frac{\partial L}{\partial\beta}
-=
-\sum_i\delta_i
+=\sum_i\delta_i
 $$
 
 > Observe que el gradiente de una muestra depende de todas las muestras del mini-batch.
