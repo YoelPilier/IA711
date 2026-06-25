@@ -332,14 +332,14 @@ $$
 ![bg left:40% width:90%](imagenes/rmsnorm.png)
 
 $$
-\operatorname{RMS}(x)
+\text{RMS}(x)
 = \sqrt{\frac1d\sum_{i=1}^{d}x_i^2}
 $$
 
 $$
 \hat{x} =
 \frac{x}
-{\operatorname{RMS}(x)+\varepsilon}
+{\text{RMS}(x)+\varepsilon}
 $$
 
 $$
@@ -472,7 +472,7 @@ Derivada:
 $$
 \frac{\partial p_j}{\partial z_i}
 =\begin{cases}
-p_j(1-p_j), & \text{si } i=j \\[6pt]
+p_j(1-p_j), & \text{si } i=j \ \[6pt]
 -p_jp_i, & \text{si } i\neq j
 \end{cases}
 $$
