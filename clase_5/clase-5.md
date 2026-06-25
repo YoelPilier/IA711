@@ -86,7 +86,7 @@ $$ Accuracy = \frac{TP + TN}{Total} $$
 ![bg left:40% width:90%](imagenes/inicializacion.png)
 
 $$
-y = \operatorname{sigmoid}(x \cdot W + b)
+y = \sigma(x \cdot W + b)
 $$
 
 - Si $W$ es muy grande, las activaciones también serán muy grandes.
@@ -188,9 +188,7 @@ $$
 - Su rendimiento disminuye cuando el batch es muy pequeño.
 
 ---
-
-<details>
-<summary>Derivada de Batch Normalization</summary>
+###Derivada de Batch Normalization</summary>
 
 Sea
 
@@ -231,7 +229,6 @@ $$
 
 > Observe que el gradiente de una muestra depende de todas las muestras del mini-batch.
 
-</details>
 
 ---
 
@@ -521,12 +518,10 @@ Derivada:
 
 $$
 \frac{\partial p_j}{\partial z_i}
-=
-\begin{cases}
+=\begin{cases}
 p_j(1-p_j), & \text{si } i=j \\[6pt]
 -p_jp_i, & \text{si } i\neq j
 \end{cases}
 $$
 
 ---
-# TBU 
