@@ -54,7 +54,9 @@ lang: es-ES
 ---
 
 # BCELoss
+
 ![bg  left:40% width:80% ](imagenes/bce.png)
+
 $$
 L = -\frac{1}{N}\sum_{i=1}^{N}
 \left(
