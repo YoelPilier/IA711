@@ -200,15 +200,11 @@ La derivada respecto a la entrada es
 
 $$
 \frac{\partial L}{\partial x_i}
-=
-\frac{\gamma}{m\sqrt{\sigma^2+\epsilon}}
+= \frac{\gamma}{m\sqrt{\sigma^2+\epsilon}}
 \left[
-m\delta_i
-- \sum_j\delta_j
-- \hat{x}_i
+m\delta_i - \sum_j\delta_j - \hat{x}_i
 \sum_j
-\delta_j\hat{x}_j
-\right]
+\delta_j\hat{x}_j \right]
 $$
 
 Además,
@@ -254,34 +250,23 @@ $$
 
 ---
 
-<details>
-<summary>Derivada de Layer Normalization</summary>
+### Derivada de Layer Normalization
 
 $$
-\frac{\partial L}{\partial x_i}
-=
-\frac{\gamma}{d\sqrt{\sigma^2+\epsilon}}
+\frac{\partial L}{\partial x_i} = \frac{\gamma}{d\sqrt{\sigma^2+\epsilon}}
 \left[
-d\delta_i
--
-\sum_j\delta_j
--
-\hat{x}_i
+d\delta_i - \sum_j\delta_j - \hat{x}_i
 \sum_j
-\delta_j\hat{x}_j
-\right]
+\delta_j\hat{x}_j \right]
 $$
 
 $$
-\frac{\partial L}{\partial\gamma}
-=
+\frac{\partial L}{\partial\gamma} =
 \sum_i\delta_i\hat{x}_i
 $$
 
 $$
-\frac{\partial L}{\partial\beta}
-=
-\sum_i\delta_i
+\frac{\partial L}{\partial\beta} = \sum_i\delta_i
 $$
 
 > Las sumas se realizan sobre las características de una única muestra.
@@ -317,39 +302,28 @@ $$
 
 ---
 
-<details>
-<summary>Derivada de Group Normalization</summary>
+### Derivada de Group Normalization
 
 $$
-\frac{\partial L}{\partial x_i}
-=
-\frac{\gamma}{m_g\sqrt{\sigma_g^2+\epsilon}}
+\frac{\partial L}{\partial x_i} = \frac{\gamma}{m_g\sqrt{\sigma_g^2+\epsilon}}
 \left[
-m_g\delta_i
--
-\sum_j\delta_j
--
-\hat{x}_i
+m_g\delta_i -
+\sum_j\delta_j - \hat{x}_i
 \sum_j
 \delta_j\hat{x}_j
 \right]
 $$
 
 $$
-\frac{\partial L}{\partial\gamma}
-=
-\sum_i\delta_i\hat{x}_i
+\frac{\partial L}{\partial\gamma} = \sum_i\delta_i\hat{x}_i
 $$
 
 $$
-\frac{\partial L}{\partial\beta}
-=
+\frac{\partial L}{\partial\beta} =
 \sum_i\delta_i
 $$
 
 > Las sumas se realizan únicamente sobre los elementos del grupo.
-
-</details>
 
 ---
 
@@ -359,13 +333,11 @@ $$
 
 $$
 \operatorname{RMS}(x)
-=
-\sqrt{\frac1d\sum_{i=1}^{d}x_i^2}
+= \sqrt{\frac1d\sum_{i=1}^{d}x_i^2}
 $$
 
 $$
-\hat{x}
-=
+\hat{x} =
 \frac{x}
 {\operatorname{RMS}(x)+\varepsilon}
 $$
@@ -381,8 +353,7 @@ $$
 
 --- 
 
-<details>
-<summary>Derivada de RMS Normalization</summary>
+### Derivada de RMS Normalization
 
 Sea
 
@@ -399,13 +370,9 @@ $$
 La derivada respecto a la entrada es
 
 $$
-\frac{\partial L}{\partial x}
-=
-\frac{\gamma}{R}
-\left(
-I-
-\frac{xx^T}{dR^2}
-\right)
+\frac{\partial L}{\partial x} =
+\frac{\gamma}{R} \left(
+I- \frac{xx^T}{dR^2} \right)
 \delta
 $$
 
@@ -413,13 +380,11 @@ Además,
 
 $$
 \frac{\partial L}{\partial\gamma}
-=
-\sum_i\delta_i\hat{x}_i
+= \sum_i\delta_i\hat{x}_i
 $$
 
 > RMSNorm no requiere derivar la media ni la varianza, por lo que su backward es más simple.
 
-</details>
 
 ---
 
@@ -448,18 +413,13 @@ $$
 - Equivale a GroupNorm cuando \(G=C\).
 
 ---
-<details>
-<summary>Derivada de Instance Normalization</summary>
+
+### Derivada de Instance Normalization
 
 $$
-\frac{\partial L}{\partial x_i}
-=
-\frac{\gamma}{HW\sqrt{\sigma_c^2+\epsilon}}
+\frac{\partial L}{\partial x_i} = \frac{\gamma}{HW\sqrt{\sigma_c^2+\epsilon}}
 \left[
-HW\delta_i
--
-\sum_j\delta_j
--
+HW\delta_i - \sum_j\delta_j -
 \hat{x}_i
 \sum_j
 \delta_j\hat{x}_j
@@ -468,18 +428,15 @@ $$
 
 $$
 \frac{\partial L}{\partial\gamma}
-=
-\sum_i\delta_i\hat{x}_i
+= \sum_i\delta_i\hat{x}_i
 $$
 
 $$
-\frac{\partial L}{\partial\beta}
-=
+\frac{\partial L}{\partial\beta} =
 \sum_i\delta_i
 $$
 
 > Cada imagen y cada canal se derivan de forma independiente.
-</details>
 
 ---
 # Problemas de clasificación multiclase:
