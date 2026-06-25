@@ -468,11 +468,12 @@ p_j = \frac{e^{z_j}}{\sum_{k=1}^{C} e^{z_k}}
 $$
 
 Derivada:
+
 $$
-\frac{\partial p_j}{\partial z_i} = 
-\begin{cases} 
-p_j(1 - p_j) & \text{si } i = j \\ 
--p_j p_i & \text{si } i \neq j 
+\frac{\partial p_j}{\partial z_i} =
+\begin{cases}
+p_j(1 - p_j) & \text{si } i = j \\
+-p_j p_i & \text{si } i \neq j
 \end{cases}
 $$
 
