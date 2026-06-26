@@ -15,6 +15,8 @@ train_data = dataset["train"].filter(
 # %%
 from matplotlib import pyplot as plt
 
+plt.imshow(train_data[0]["image"], cmap="gray")
+
 
 # %%
 # %%
@@ -61,7 +63,7 @@ print(x[0].shape, x[1].shape)
 # %%
 import utils
 
-# utils.show_batch(x[0][:16], x[1][:16])
+utils.show_batch(x[0][:16], x[1][:16])
 # %%
 import torch
 
@@ -75,101 +77,31 @@ class Model(nn.Module):
     def __init__(self):
         super().__init__()
         self.l1 = nn.Linear(28 * 28, 512)
-        self.norm1 = nn.LayerNorm(512)
-        self.act1 = nn.Sigmoid()
         self.l2 = nn.Linear(512, 256)
-        self.norm2 = nn.LayerNorm(256)
-        self.act2 = nn.Sigmoid()
         self.l3 = nn.Linear(256, 1)
-
-        nn.init.xavier_uniform_(self.l1.weight)
-        nn.init.xavier_uniform_(self.l2.weight)
-        nn.init.xavier_uniform_(self.l3.weight)
-
-        nn.init.zeros_(self.l1.bias)
-        nn.init.zeros_(self.l2.bias)
-        nn.init.zeros_(self.l3.bias)
+        self.act = nn.ReLU()
 
     def forward(self, x):
         x = x.reshape(x.shape[0], -1)
         x = self.l1(x)
-        x = self.norm1(x)
-        x = self.act1(x)
+        x = self.act(x)
         x = self.l2(x)
-        x = self.norm2(x)
-        x = self.act2(x)
+        x = self.act(x)
         x = self.l3(x)
         return x
 
 
-class Model2(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.l1 = nn.Linear(28 * 28, 512)
-        self.norm1 = nn.LayerNorm(512)
-        self.act1 = nn.Sigmoid()
-        self.l2 = nn.Linear(512, 512)
-        self.norm2 = nn.LayerNorm(512)
-        self.act2 = nn.Sigmoid()
-        self.l3 = nn.Linear(512, 512)
-        self.norm3 = nn.LayerNorm(512)
-        self.act3 = nn.Sigmoid()
-        self.l4 = nn.Linear(512, 512)
-        self.norm4 = nn.LayerNorm(512)
-        self.act4 = nn.Sigmoid()
-        self.l5 = nn.Linear(512, 256)
-        self.norm5 = nn.LayerNorm(256)
-        self.act5 = nn.Sigmoid()
-        self.l6 = nn.Linear(256, 1)
-
-        nn.init.xavier_uniform_(self.l1.weight)
-        nn.init.xavier_uniform_(self.l2.weight)
-        nn.init.xavier_uniform_(self.l3.weight)
-        nn.init.xavier_uniform_(self.l4.weight)
-        nn.init.xavier_uniform_(self.l5.weight)
-        nn.init.xavier_uniform_(self.l6.weight)
-
-        nn.init.zeros_(self.l1.bias)
-        nn.init.zeros_(self.l2.bias)
-        nn.init.zeros_(self.l3.bias)
-        nn.init.zeros_(self.l4.bias)
-        nn.init.zeros_(self.l5.bias)
-        nn.init.zeros_(self.l6.bias)
-
-    def forward(self, x):
-        x = x.reshape(x.shape[0], -1)
-        x = self.l1(x)
-        x = self.norm1(x)
-        x = self.act1(x)
-        x = self.l2(x)
-        x = self.norm2(x)
-        x = self.act2(x)
-        x = self.l3(x)
-        x = self.norm3(x)
-        x = self.act3(x)
-        x = self.l4(x)
-        x = self.norm4(x)
-        x = self.act4(x)
-        x = self.l5(x)
-        x = self.norm5(x)
-        x = self.act5(x)
-        x = self.l6(x)
-        return x
-
-
-# Model2()(torch.randn(1, 1, 28, 28)).shape
-# Model()(torch.randn(1, 1, 28, 28)).shape
+Model()(torch.randn(1, 1, 28, 28)).shape
 # %%
 from torch import optim
 from torchmetrics.functional.classification import accuracy
 from tqdm import tqdm
 
-# model = Model2().to(device)
 model = Model().to(device)
 loss_fn = nn.BCEWithLogitsLoss()
-lr = 1e-2
+lr = 1e-3
 epochs = 10
-# model_monitor = utils.ModelMonitor(model)
+
 optimizer = optim.SGD(model.parameters(), lr=lr)
 
 train_loss = []
@@ -193,7 +125,6 @@ for epoch in range(epochs):
         optimizer.step()
         epoch_loss += loss.item()
         epoch_acc += acc.item()
-        # model_monitor.step()
     train_loss.append(epoch_loss / len(train_dataloader))
     train_acc.append(epoch_acc / len(train_dataloader))
 
@@ -222,19 +153,18 @@ for epoch in range(epochs):
         f"Test Acc: {test_acc[-1]:.4f}"
     )
 
-# model_monitor.report(include_history=True)
 # %%
 
-# model.eval()
-# y_true = []
-# y_pred = []
-#
-# with torch.inference_mode():
-#     for x, y in tqdm(test_dataloader, desc="Evaluating final model"):
-#         x, y = x.to(device), y.to(device).float()
-#         out = model(x).squeeze()
-#         y_true.append(y.cpu())
-#         y_pred.append(out.cpu())
-#
-# utils.plot_confusion_matrix(torch.cat(y_true), torch.cat(y_pred))
-# # %%
+model.eval()
+y_true = []
+y_pred = []
+
+with torch.inference_mode():
+    for x, y in tqdm(test_dataloader, desc="Evaluating final model"):
+        x, y = x.to(device), y.to(device).float()
+        out = model(x).squeeze()
+        y_true.append(y.cpu())
+        y_pred.append(out.cpu())
+
+utils.plot_confusion_matrix(torch.cat(y_true), torch.cat(y_pred))
+# %%
