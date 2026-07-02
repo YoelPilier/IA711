@@ -28,6 +28,9 @@
     - [Pizarra de la clase 5](./clase_5/clase_5.excalidraw)
     - [Código de ejemplo de la clase 5](./clase_5/codigo)
     - [Ejercicios 3](./ejercicios/Ejercicios_3.md)
+- [Clase 6](./clase_6/clase-6.md) - Visión por computadora y Estabilidad del entrenamiento
+    - [Ejercicios 4](./ejercicios/Ejercicios_4.md)
+
 ## Guías
 
 - [Python](./guias/guia-python.md)
