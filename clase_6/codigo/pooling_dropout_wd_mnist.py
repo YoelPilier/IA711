@@ -15,7 +15,6 @@ from matplotlib import pyplot as plt
 
 
 # %%
-# %%
 from torchvision import transforms
 from torch.utils.data import DataLoader, Dataset
 

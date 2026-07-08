@@ -251,7 +251,8 @@ input image → convolutional layer(n) → pooling layer → fully connected lay
 
 ---
 
-# Dropout
+
+# Dropout 
 
 ![bg  left:40% width:98% ](imagenes/Dropout.png)
 
@@ -285,21 +286,60 @@ $$
 
 --- 
 
+# Weight Decay
+
+![bg  left:40% width:95% ](imagenes/wdecay.png)
+
+
+**Función de pérdida:**
+
+$$
+\mathcal{L}*{total} = \mathcal{L}*{data} + \frac{\lambda}{2}\sum_i w_i^2
+$$
+
+**Derivada de la penalización:**
+
+$$
+\frac{\partial}{\partial w_i}\left(\frac{\lambda}{2}w_i^2\right) = \lambda w_i
+$$
+
+$\lambda$: Peso de la penalización  $\eta$: Learning rate
+
+--- 
+
+![bg  left:40% width:95% ](imagenes/wdecay.png)
+
+**Actualización del peso:**
+
+$$
+w \leftarrow w - \eta(\nabla_w \mathcal{L}_{data} + \lambda w)
+$$
+
+**Forma equivalente:**
+
+$$
+w \leftarrow (1 - \eta\lambda)w - \eta\nabla_w \mathcal{L}_{data}
+$$
+
+> Krogh , A., & Hertz, J. A. (1991). A Simple Weight Decay Can Improve Generalization. 
+
+
+---
+
 # Aumento de Datos
 
 ![bg  left:40% width:80% ](imagenes/aumentodatos.png)
 
+[Transforms](https://docs.pytorch.org/vision/0.11/auto_examples/plot_transforms.html#sphx-glr-auto-examples-plot-transforms-py)
 - Random Rotation
-- Random Flip Horizontal
-- Random Flip Vertical
+- Random Flip Horizontal/Vertical
 - Random Crop
 - Resize
 - Random Deform
 - Random Erase
 - Random Copy Paste
 - ToTensor
-- Normalize
-- Denormalize
+- Normalize/Denormalize
 
 ---
 
