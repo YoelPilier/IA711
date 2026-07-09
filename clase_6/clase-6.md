@@ -457,44 +457,58 @@ $$
 
 # Bilinear Upsampling
 
-![bg  left:40% width:80% ](imagenes/biliupsample.png)
+![bg left:40% width:80%](imagenes/biliupsample.png)
 
 $$
-Y = (1-\alpha)(1-\beta)X_{00}
-+
-\alpha(1-\beta)X_{10}
-+
-(1-\alpha)\beta X_{01}
-+
+x = j \frac{W_{in}-1}{W_{out}-1},
+\quad 
+y = i \frac{H_{in}-1}{H_{out}-1}
+$$
+
+$$
+x_0=\lfloor x \rfloor,\quad y_0=\lfloor y \rfloor
+$$
+
+$$
+\alpha = x - x_0,
+\quad
+\beta = y - y_0
+$$
+
+## Interpolación 
+
+$$
+Y[i,j] =
+(1-\alpha)(1-\beta)X_{00} +
+\alpha(1-\beta)X_{10} +
+(1-\alpha)\beta X_{01} +
 \alpha\beta X_{11}
 $$
+
+---
+
+# Bilinear Upsampling
+
+![bg left:40% width:80%](imagenes/biliupsample.png)
+
 
 Derivadas:
 
 $$
-\frac{\partial L}{\partial X_{00}} =
-(1-\alpha)(1-\beta)
-\frac{\partial L}{\partial Y}
+\frac{\partial L}{\partial X_{00}}=(1-\alpha)(1-\beta)\frac{\partial L}{\partial Y}
 $$
 
 $$
-\frac{\partial L}{\partial X_{10}} =
-\alpha(1-\beta)
-\frac{\partial L}{\partial Y}
+\frac{\partial L}{\partial X_{10}}=\alpha(1-\beta)\frac{\partial L}{\partial Y}
 $$
 
 $$
-\frac{\partial L}{\partial X_{01}} =
-(1-\alpha)\beta
-\frac{\partial L}{\partial Y}
+\frac{\partial L}{\partial X_{01}}=(1-\alpha)\beta\frac{\partial L}{\partial Y}
 $$
 
 $$
-\frac{\partial L}{\partial X_{11}} =
-\alpha\beta
-\frac{\partial L}{\partial Y}
+\frac{\partial L}{\partial X_{11}}=\alpha\beta\frac{\partial L}{\partial Y}
 $$
-
 ---
 
 # Pixel Shuffle 
