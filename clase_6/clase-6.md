@@ -485,9 +485,9 @@ $$
 
 
 $$
-x \leftarrow \operatorname{clamp}(x,0,W_{in}-1),
+x \leftarrow \text{clamp}(x,0,W_{in}-1),
 \qquad
-y \leftarrow \operatorname{clamp}(y,0,H_{in}-1)
+y \leftarrow \text{clamp}(y,0,H_{in}-1)
 $$
 
 
