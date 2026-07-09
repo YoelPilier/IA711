@@ -459,23 +459,47 @@ $$
 
 ![bg left:40% width:80%](imagenes/biliupsample.png)
 
+## Coordenadas continuas
+
+Con `align_corners=True`:
+
 $$
-x = j \frac{W_{in}-1}{W_{out}-1},
-\quad 
-y = i \frac{H_{in}-1}{H_{out}-1}
+x = j\frac{W_{in}-1}{W_{out}-1},
+\qquad
+y = i\frac{H_{in}-1}{H_{out}-1}
 $$
+
+Con `align_corners=False`:
+
+$$
+x = \left(j+\frac{1}{2}\right)\frac{W_{in}}{W_{out}}-\frac{1}{2},
+\qquad
+y = \left(i+\frac{1}{2}\right)\frac{H_{in}}{H_{out}}-\frac{1}{2}
+$$
+
+---
+
+# Bilinear Upsampling
+
+![bg left:40% width:80%](imagenes/biliupsample.png)
+
+
+$$
+x \leftarrow \operatorname{clamp}(x,0,W_{in}-1),
+\qquad
+y \leftarrow \operatorname{clamp}(y,0,H_{in}-1)
+$$
+
 
 $$
 x_0=\lfloor x \rfloor,\quad y_0=\lfloor y \rfloor
 $$
 
 $$
-\alpha = x - x_0,
-\quad
-\beta = y - y_0
+\alpha=x-x_0,\qquad \beta=y-y_0
 $$
 
-## Interpolación 
+Interpolación: 
 
 $$
 Y[i,j] =
@@ -485,12 +509,12 @@ Y[i,j] =
 \alpha\beta X_{11}
 $$
 
+
 ---
 
 # Bilinear Upsampling
 
 ![bg left:40% width:80%](imagenes/biliupsample.png)
-
 
 Derivadas:
 
@@ -567,4 +591,36 @@ $$
 
 ---
 
+# Peak Signal-to-Noise Ratio
 
+![bg  left:40% width:80% ](imagenes/psnr.png)
+
+$$
+\mathrm{MSE}
+= \frac{1}{N}
+\sum_i
+(X_i-\hat{X}_i)^2
+$$
+
+$$
+\mathrm{PSNR} =
+10\log_{10}
+\left(
+\frac{MAX_I^2}{\mathrm{MSE}}
+\right)
+$$
+
+$$
+MAX_I =
+\begin{cases}
+1, & \text{imagen normalizada} \\
+255, & \text{imagen de 8 bits}
+\end{cases}
+$$
+
+
+$$
+\mathrm{MSE} \downarrow
+\Rightarrow
+\mathrm{PSNR} \uparrow
+$$
