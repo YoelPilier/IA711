@@ -509,6 +509,7 @@ $$
 $$
 \frac{\partial L}{\partial X_{11}}=\alpha\beta\frac{\partial L}{\partial Y}
 $$
+
 ---
 
 # Pixel Shuffle 
