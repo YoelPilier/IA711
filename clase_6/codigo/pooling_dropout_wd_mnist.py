@@ -69,37 +69,43 @@ import torch.nn as nn
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
-        self.c1 = nn.Conv2d(1, 64, kernel_size=3, stride=2, padding=1)
-        self.n1 = nn.BatchNorm2d(64)
-        self.r1 = nn.ReLU()
-        self.c2 = nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1)
-        self.n2 = nn.BatchNorm2d(128)
-        self.r2 = nn.ReLU()
-        self.c3 = nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1)
-        self.n3 = nn.BatchNorm2d(256)
-        self.r3 = nn.ReLU()
+        self.c1 = nn.Sequential(
+            nn.Conv2d(1, 64, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+        )
+        self.c2 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+        )
+        self.c3 = nn.Sequential(
+            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+        )
+
+        self.flat = nn.Sequential(nn.AdaptiveAvgPool2d(1), nn.Flatten())
         self.fc = nn.Linear(256, 10)
+
         # initialize weights
-        nn.init.kaiming_normal_(self.c1.weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c2.weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c3.weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c1[0].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c2[0].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c3[0].weight, nonlinearity="relu", mode="fan_out")
         nn.init.kaiming_normal_(self.fc.weight, nonlinearity="linear", mode="fan_out")
-        nn.init.zeros_(self.c1.bias)
-        nn.init.zeros_(self.c2.bias)
-        nn.init.zeros_(self.c3.bias)
+        nn.init.zeros_(self.c1[0].bias)
+        nn.init.zeros_(self.c2[0].bias)
+        nn.init.zeros_(self.c3[0].bias)
         nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
         x = self.c1(x)
-        x = self.n1(x)
-        x = self.r1(x)
         x = self.c2(x)
-        x = self.n2(x)
-        x = self.r2(x)
         x = self.c3(x)
-        x = self.n3(x)
-        x = self.r3(x)
-        x = x.mean(dim=[2, 3])  # Global Average Pooling
+        x = self.flat(x)
         x = self.fc(x)
         return x
 
@@ -113,8 +119,11 @@ from tqdm import tqdm
 model = Model().to(device)
 loss_fn = nn.CrossEntropyLoss()
 lr = 1e-2
+wd = 1e-3
 epochs = 10
-optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, nesterov=True)
+optimizer = optim.SGD(
+    model.parameters(), lr=lr, momentum=0.9, nesterov=True, weight_decay=wd
+)
 
 train_loss = []
 train_acc = []
@@ -125,7 +134,8 @@ for epoch in range(epochs):
     model.train()
     epoch_loss = 0
     epoch_acc = 0
-
+    if epoch == 4:
+        optimizer.param_groups[0]["lr"] = 1e-3
     for x, y in tqdm(train_dataloader, desc=f"Epoch {epoch + 1}/{epochs}"):
         x, y = x.to(device), y.to(device).float()
 
