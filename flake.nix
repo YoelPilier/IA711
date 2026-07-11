@@ -35,7 +35,6 @@
               safetensors
               torchmetrics
               torchvision
-              lpips
             ]))
           pkgs.fish
         ];
