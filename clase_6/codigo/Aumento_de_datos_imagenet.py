@@ -24,75 +24,198 @@ plt.show()
 # %%
 # Aumentación de datos
 
-# Random Rotation
 import random
+
+import numpy as np
+import torch
 from PIL import Image
 
 
 primera_imagen = train_data[0]["image"]
 
 
+# %%
+# Funciones auxiliares
+
+
+def ensure_rgb(image):
+    """
+    Garantiza que la entrada sea una imagen PIL con tres canales RGB.
+    """
+
+    if not isinstance(image, Image.Image):
+        raise TypeError(
+            f"Se esperaba una imagen PIL, pero se recibió {type(image).__name__}"
+        )
+
+    return image.convert("RGB")
+
+
+def parse_size(size):
+    """
+    Convierte:
+        128        -> (128, 128)
+        (128, 64)  -> (alto=128, ancho=64)
+    """
+
+    if isinstance(size, int):
+        if size <= 0:
+            raise ValueError("size debe ser mayor que cero")
+
+        return size, size
+
+    if len(size) != 2:
+        raise ValueError("size debe ser un entero o una tupla (alto, ancho)")
+
+    height, width = int(size[0]), int(size[1])
+
+    if height <= 0 or width <= 0:
+        raise ValueError("Las dimensiones deben ser mayores que cero")
+
+    return height, width
+
+
+# %%
+# Random Rotation
+
+
 class RandomRotation:
     def __init__(self, angle):
-        self.angle = angle
+        if isinstance(angle, (int, float)):
+            if angle < 0:
+                raise ValueError("angle debe ser positivo")
+
+            self.min_angle = -float(angle)
+            self.max_angle = float(angle)
+
+        else:
+            if len(angle) != 2:
+                raise ValueError(
+                    "angle debe ser un número o una tupla (mínimo, máximo)"
+                )
+
+            self.min_angle = float(angle[0])
+            self.max_angle = float(angle[1])
+
+            if self.min_angle > self.max_angle:
+                raise ValueError("El ángulo mínimo no puede ser mayor que el máximo")
 
     def __call__(self, image):
+        image = ensure_rgb(image)
 
-        angle = random.randint(-self.angle, self.angle)
-        return image.rotate(angle)
+        angle = random.uniform(
+            self.min_angle,
+            self.max_angle,
+        )
+
+        return image.rotate(
+            angle,
+            resample=Image.Resampling.BILINEAR,
+            expand=False,
+            fillcolor=(0, 0, 0),
+        )
 
 
 RandomRotation(45)(primera_imagen)
 
-# %%
 
+# %%
 # Random Flip Horizontal
 
 
 class RandomFlipHorizontal:
     def __init__(self, p):
+        if not 0 <= p <= 1:
+            raise ValueError("p debe estar entre 0 y 1")
+
         self.p = p
 
     def __call__(self, image):
+        image = ensure_rgb(image)
+
         if random.random() < self.p:
-            return image.transpose(Image.FLIP_LEFT_RIGHT)
+            return image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+
         return image
 
 
 RandomFlipHorizontal(0.5)(primera_imagen)
 
-# %%
 
+# %%
 # Random Flip Vertical
 
 
 class RandomFlipVertical:
     def __init__(self, p):
+        if not 0 <= p <= 1:
+            raise ValueError("p debe estar entre 0 y 1")
+
         self.p = p
 
     def __call__(self, image):
+        image = ensure_rgb(image)
+
         if random.random() < self.p:
-            return image.transpose(Image.FLIP_TOP_BOTTOM)
+            return image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+
         return image
 
 
 RandomFlipVertical(0.5)(primera_imagen)
 
-# %%
 
+# %%
 # Random Crop
 
 
 class RandomCrop:
     def __init__(self, size):
-        self.size = size
+        self.crop_height, self.crop_width = parse_size(size)
 
     def __call__(self, image):
+        image = ensure_rgb(image)
+
         width, height = image.size
-        left = random.randint(0, width - self.size)
-        top = random.randint(0, height - self.size)
-        right = left + self.size
-        bottom = top + self.size
+
+        # Si la imagen es más pequeña que el recorte,
+        # se amplía manteniendo su relación de aspecto.
+        if width < self.crop_width or height < self.crop_height:
+            scale = max(
+                self.crop_width / width,
+                self.crop_height / height,
+            )
+
+            new_width = max(
+                self.crop_width,
+                round(width * scale),
+            )
+
+            new_height = max(
+                self.crop_height,
+                round(height * scale),
+            )
+
+            image = image.resize(
+                (new_width, new_height),
+                resample=Image.Resampling.BILINEAR,
+            )
+
+            width, height = image.size
+
+        left = random.randint(
+            0,
+            width - self.crop_width,
+        )
+
+        top = random.randint(
+            0,
+            height - self.crop_height,
+        )
+
+        right = left + self.crop_width
+        bottom = top + self.crop_height
+
         return image.crop((left, top, right, bottom))
 
 
@@ -100,133 +223,261 @@ RandomCrop(128)(primera_imagen)
 
 
 # %%
-
 # Resize
 
 
 class Resize:
     def __init__(self, size):
-        self.size = size
+        self.height, self.width = parse_size(size)
 
     def __call__(self, image):
-        return image.resize((self.size, self.size))
+        image = ensure_rgb(image)
+
+        # PIL recibe el tamaño como (ancho, alto).
+        return image.resize(
+            (self.width, self.height),
+            resample=Image.Resampling.BILINEAR,
+        )
 
 
 Resize(64)(primera_imagen)
 
+
 # %%
 # Random Deform
-import numpy as np
 
 
 class RandomDeform:
-    def __init__(self):
-        pass
+    def __init__(
+        self,
+        p=0.5,
+        min_scale=0.2,
+        max_scale=1.0,
+    ):
+        if not 0 <= p <= 1:
+            raise ValueError("p debe estar entre 0 y 1")
 
-    def __call__(self, imge):
-        # Abre la imagen
-        img = imge.copy()
-        modificar = random.randint(0, 1)
-        originalsize = img.size
-        if modificar == 0:
-            return img
+        if not 0 < min_scale <= max_scale <= 1:
+            raise ValueError("Debe cumplirse 0 < min_scale <= max_scale <= 1")
 
-        # Genera factores de escala aleatorios entre 0.5 y 1.0
-        scale_factor_x = random.uniform(0.2, 1.0)
-        scale_factor_y = random.uniform(0.2, 1.0)
+        self.p = p
+        self.min_scale = min_scale
+        self.max_scale = max_scale
 
-        # Calcula las nuevas dimensiones
-        new_width = int(img.width * scale_factor_x)
-        new_height = int(img.height * scale_factor_y)
+    def __call__(self, image):
+        image = ensure_rgb(image)
 
-        # Redimensiona la imagen
-        resized_img = img.resize((new_width, new_height))
+        if random.random() >= self.p:
+            return image.copy()
 
-        # Genera una imagen de ruido del mismo tamaño que la imagen original
-        noise = np.random.normal(0, 1, (originalsize[1], originalsize[0], 3))
-        noise = (noise - np.min(noise)) / (np.max(noise) - np.min(noise))
-        noise_img = Image.fromarray((noise * 255).astype(np.uint8))
+        width, height = image.size
 
-        # Pega la imagen redimensionada en la imagen de ruido
-        noise_img.paste(resized_img, (0, 0))
+        scale_factor_x = random.uniform(
+            self.min_scale,
+            self.max_scale,
+        )
 
-        return noise_img
+        scale_factor_y = random.uniform(
+            self.min_scale,
+            self.max_scale,
+        )
+
+        # max(1, ...) evita crear imágenes con dimensión cero.
+        new_width = max(
+            1,
+            round(width * scale_factor_x),
+        )
+
+        new_height = max(
+            1,
+            round(height * scale_factor_y),
+        )
+
+        resized_image = image.resize(
+            (new_width, new_height),
+            resample=Image.Resampling.BILINEAR,
+        )
+
+        # Crea un fondo de ruido con el tamaño original.
+        noise = np.random.randint(
+            low=0,
+            high=256,
+            size=(height, width, 3),
+            dtype=np.uint8,
+        )
+
+        noise_image = Image.fromarray(noise)
+
+        # Posición aleatoria donde se pegará la imagen deformada.
+        left = random.randint(
+            0,
+            width - new_width,
+        )
+
+        top = random.randint(
+            0,
+            height - new_height,
+        )
+
+        noise_image.paste(
+            resized_image,
+            (left, top),
+        )
+
+        return noise_image
 
 
 RandomDeform()(primera_imagen)
+
+
 # %%
+# Random Erase
 
 
 class RandomErase:
-    def __init__(self, p):
+    def __init__(
+        self,
+        p,
+        scale=(0.1, 0.4),
+    ):
+        if not 0 <= p <= 1:
+            raise ValueError("p debe estar entre 0 y 1")
+
+        if len(scale) != 2 or not 0 < scale[0] <= scale[1] <= 1:
+            raise ValueError("scale debe cumplir 0 < mínimo <= máximo <= 1")
+
         self.p = p
+        self.scale = scale
 
     def __call__(self, image):
-        if random.random() < self.p:
-            width, height = image.size
-            scale = random.uniform(0.1, 0.4)
-            erase_size = int(min(width, height) * scale)
-            left = random.randint(0, width - erase_size)
-            top = random.randint(0, height - erase_size)
-            right = left + erase_size
-            bottom = top + erase_size
-            image = image.copy()
+        image = ensure_rgb(image)
 
-            # Genera una imagen de ruido del tamaño del área borrada
-            noise = np.random.normal(0, 1, (erase_size, erase_size, 3))
-            noise = (noise - np.min(noise)) / (np.max(noise) - np.min(noise))
-            noise_img = Image.fromarray((noise * 255).astype(np.uint8))
+        if random.random() >= self.p:
+            return image
 
-            # Pega la imagen de ruido en la imagen original
-            image.paste(noise_img, (left, top, right, bottom))
+        image = image.copy()
+
+        width, height = image.size
+
+        scale = random.uniform(
+            self.scale[0],
+            self.scale[1],
+        )
+
+        erase_size = round(min(width, height) * scale)
+
+        # Garantiza un tamaño válido.
+        erase_size = max(
+            1,
+            min(erase_size, width, height),
+        )
+
+        left = random.randint(
+            0,
+            width - erase_size,
+        )
+
+        top = random.randint(
+            0,
+            height - erase_size,
+        )
+
+        noise = np.random.randint(
+            low=0,
+            high=256,
+            size=(erase_size, erase_size, 3),
+            dtype=np.uint8,
+        )
+
+        noise_image = Image.fromarray(noise)
+
+        image.paste(
+            noise_image,
+            (left, top),
+        )
 
         return image
 
 
 RandomErase(0.5)(primera_imagen)
 
-# %%
 
+# %%
 # Random Copy Paste
 
 
 class RandomCopyPaste:
     def __init__(self, p, size):
+        if not 0 <= p <= 1:
+            raise ValueError("p debe estar entre 0 y 1")
+
         self.p = p
-        self.size = size
+        self.patch_height, self.patch_width = parse_size(size)
 
     def __call__(self, image):
-        if random.random() < self.p:
-            image = image.copy()
-            source_location = (
-                random.randint(0, image.width - self.size),
-                random.randint(0, image.height - self.size),
-            )
+        image = ensure_rgb(image)
 
-            paste_location = (
-                random.randint(0, image.width - self.size),
-                random.randint(0, image.height - self.size),
+        if random.random() >= self.p:
+            return image
+
+        image = image.copy()
+
+        width, height = image.size
+
+        # Si el parche solicitado es mayor que la imagen,
+        # se limita al tamaño de la imagen.
+        patch_width = min(
+            self.patch_width,
+            width,
+        )
+
+        patch_height = min(
+            self.patch_height,
+            height,
+        )
+
+        source_left = random.randint(
+            0,
+            width - patch_width,
+        )
+
+        source_top = random.randint(
+            0,
+            height - patch_height,
+        )
+
+        paste_left = random.randint(
+            0,
+            width - patch_width,
+        )
+
+        paste_top = random.randint(
+            0,
+            height - patch_height,
+        )
+
+        image_patch = image.crop(
+            (
+                source_left,
+                source_top,
+                source_left + patch_width,
+                source_top + patch_height,
             )
-            image_patch = image.crop(
-                (
-                    *source_location,
-                    source_location[0] + self.size,
-                    source_location[1] + self.size,
-                )
-            )
-            image.paste(image_patch, paste_location)
+        )
+
+        image.paste(
+            image_patch,
+            (paste_left, paste_top),
+        )
 
         return image
 
 
 RandomCopyPaste(0.5, 100)(primera_imagen)
 
+
 # %%
-
 # ToTensor
-
-
-import torch
 
 
 class ToTensor:
@@ -234,49 +485,155 @@ class ToTensor:
         pass
 
     def __call__(self, image):
-        return torch.tensor(np.array(image)).permute(2, 0, 1).float() / 255.0
+        image = ensure_rgb(image)
+
+        array = np.array(
+            image,
+            dtype=np.float32,
+            copy=True,
+        )
+
+        array = array / 255.0
+
+        tensor = torch.from_numpy(array)
+
+        # (H, W, C) -> (C, H, W)
+        tensor = tensor.permute(2, 0, 1)
+
+        return tensor.contiguous()
 
 
 ToTensor()(primera_imagen)
 
-# %%
-
 
 # %%
-
 # Normalize
-
-import torch
 
 
 class Normalize:
     def __init__(self, mean, std):
-        self.mean = torch.tensor(mean)
-        self.std = torch.tensor(std)
+        self.mean = torch.as_tensor(
+            mean,
+            dtype=torch.float32,
+        ).view(-1, 1, 1)
+
+        self.std = torch.as_tensor(
+            std,
+            dtype=torch.float32,
+        ).view(-1, 1, 1)
+
+        if self.mean.shape != self.std.shape:
+            raise ValueError("mean y std deben tener la misma cantidad de valores")
+
+        if torch.any(self.std <= 0):
+            raise ValueError("Los valores de std deben ser mayores que cero")
 
     def __call__(self, tensor):
-        return (tensor - self.mean[:, None, None]) / self.std[:, None, None]
+        if not isinstance(tensor, torch.Tensor):
+            raise TypeError("Normalize esperaba un tensor de PyTorch")
+
+        if tensor.ndim != 3:
+            raise ValueError("El tensor debe tener forma (C, H, W)")
+
+        if tensor.shape[0] != self.mean.shape[0]:
+            raise ValueError(
+                f"El tensor tiene {tensor.shape[0]} canales, "
+                f"pero mean y std tienen {self.mean.shape[0]} valores"
+            )
+
+        mean = self.mean.to(
+            device=tensor.device,
+            dtype=tensor.dtype,
+        )
+
+        std = self.std.to(
+            device=tensor.device,
+            dtype=tensor.dtype,
+        )
+
+        return (tensor - mean) / std
 
 
-Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])(ToTensor()(primera_imagen))
+Normalize(
+    [0.5, 0.5, 0.5],
+    [0.5, 0.5, 0.5],
+)(ToTensor()(primera_imagen))
+
 
 # %%
+# Denormalize
 
 
 class Denormalize:
-    def __init__(self, mean, std):
-        self.mean = torch.tensor(mean)[:, None, None]
-        self.std = torch.tensor(std)[:, None, None]
+    def __init__(
+        self,
+        mean,
+        std,
+        clamp=False,
+    ):
+        self.mean = torch.as_tensor(
+            mean,
+            dtype=torch.float32,
+        ).view(-1, 1, 1)
+
+        self.std = torch.as_tensor(
+            std,
+            dtype=torch.float32,
+        ).view(-1, 1, 1)
+
+        if self.mean.shape != self.std.shape:
+            raise ValueError("mean y std deben tener la misma cantidad de valores")
+
+        if torch.any(self.std <= 0):
+            raise ValueError("Los valores de std deben ser mayores que cero")
+
+        self.clamp = clamp
 
     def __call__(self, tensor):
-        result = tensor * self.std.to(tensor.device) + self.mean.to(tensor.device)
+        if not isinstance(tensor, torch.Tensor):
+            raise TypeError("Denormalize esperaba un tensor de PyTorch")
+
+        if tensor.ndim != 3:
+            raise ValueError("El tensor debe tener forma (C, H, W)")
+
+        if tensor.shape[0] != self.mean.shape[0]:
+            raise ValueError(
+                f"El tensor tiene {tensor.shape[0]} canales, "
+                f"pero mean y std tienen {self.mean.shape[0]} valores"
+            )
+
+        mean = self.mean.to(
+            device=tensor.device,
+            dtype=tensor.dtype,
+        )
+
+        std = self.std.to(
+            device=tensor.device,
+            dtype=tensor.dtype,
+        )
+
+        result = tensor * std + mean
+
+        if self.clamp:
+            result = result.clamp(0.0, 1.0)
+
         return result
 
 
-Denormalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])(
-    Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])(ToTensor()(primera_imagen))
-)
+tensor = ToTensor()(primera_imagen)
 
+normalized = Normalize(
+    [0.5, 0.5, 0.5],
+    [0.5, 0.5, 0.5],
+)(tensor)
+
+restored = Denormalize(
+    [0.5, 0.5, 0.5],
+    [0.5, 0.5, 0.5],
+    clamp=True,
+)(normalized)
+
+restored
 # %%
 
 
@@ -327,25 +684,29 @@ class ImagenetteData(Dataset):
 
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
-size = (128, 128)
+size = (224, 224)
+
 
 train_transform = transforms.Compose(
     [
-        transforms.RandomResizedCrop(128, scale=(0.8, 1.0)),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomVerticalFlip(),
-        transforms.RandomRotation(20),
-        transforms.Resize(size),
-        transforms.ToTensor(),
-        transforms.Normalize(mean, std),
+        RandomCrop(size),
+        RandomFlipHorizontal(0.4),
+        RandomFlipVertical(0.4),
+        RandomRotation(20),
+        RandomErase(0.2),
+        RandomCopyPaste(0.2, 32),
+        Resize(size),
+        ToTensor(),
+        Normalize(mean, std),
     ]
 )
+
+
 test_transform = transforms.Compose(
     [
-        transforms.CenterCrop(128),
-        transforms.Resize(size),
-        transforms.ToTensor(),
-        transforms.Normalize(mean, std),
+        Resize(size),
+        ToTensor(),
+        Normalize(mean, std),
     ]
 )
 train_dataset = ImagenetteData(train_data, transform=train_transform)
@@ -368,7 +729,7 @@ test_dataloader = DataLoader(
 
 x = next(iter(train_dataloader))
 print(x[0].shape, x[1].shape)
-# show_batch(x, denormalize=Denormalize(mean, std))
+show_batch(x, denormalize=Denormalize(mean, std))
 # %%
 
 import torch
@@ -383,41 +744,41 @@ class Model(nn.Module):
     def __init__(self):
         super().__init__()
         self.c1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1, bias=False),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Conv2d(64, 64, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Dropout(0.1),
         )
         self.c2 = nn.Sequential(
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1, bias=False),
             nn.BatchNorm2d(128),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(128),
             nn.ReLU(),
             nn.Dropout(0.1),
         )
         self.c3 = nn.Sequential(
-            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1, bias=False),
             nn.BatchNorm2d(256),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Conv2d(256, 256, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(256),
             nn.ReLU(),
             nn.Dropout(0.1),
         )
         self.c4 = nn.Sequential(
-            nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1, bias=False),
             nn.BatchNorm2d(512),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(512),
             nn.ReLU(),
             nn.Dropout(0.1),
@@ -436,14 +797,6 @@ class Model(nn.Module):
         nn.init.kaiming_normal_(self.c4[0].weight, nonlinearity="relu", mode="fan_out")
         nn.init.kaiming_normal_(self.c4[4].weight, nonlinearity="relu", mode="fan_out")
         nn.init.kaiming_normal_(self.fc.weight, nonlinearity="linear", mode="fan_out")
-        nn.init.zeros_(self.c1[0].bias)
-        nn.init.zeros_(self.c1[4].bias)
-        nn.init.zeros_(self.c2[0].bias)
-        nn.init.zeros_(self.c2[4].bias)
-        nn.init.zeros_(self.c3[0].bias)
-        nn.init.zeros_(self.c3[4].bias)
-        nn.init.zeros_(self.c4[0].bias)
-        nn.init.zeros_(self.c4[4].bias)
         nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
@@ -464,6 +817,10 @@ from torchmetrics.functional.classification import accuracy
 from tqdm import tqdm, utils
 
 model = Model().to(device)
+
+
+# %%
+
 loss_fn = nn.CrossEntropyLoss()
 lr = 1e-2
 wd = 1e-4
@@ -471,7 +828,6 @@ epochs = 10
 optimizer = optim.SGD(
     model.parameters(), lr=lr, momentum=0.9, nesterov=True, weight_decay=wd
 )
-
 # %%
 
 train_loss = []
