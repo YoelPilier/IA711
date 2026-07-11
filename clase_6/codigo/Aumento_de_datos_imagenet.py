@@ -96,7 +96,7 @@ class RandomCrop:
         return image.crop((left, top, right, bottom))
 
 
-RandomCrop(100)(primera_imagen)
+RandomCrop(128)(primera_imagen)
 
 
 # %%
@@ -112,7 +112,7 @@ class Resize:
         return image.resize((self.size, self.size))
 
 
-Resize(100)(primera_imagen)
+Resize(64)(primera_imagen)
 
 # %%
 # Random Deform
@@ -327,13 +327,26 @@ class ImagenetteData(Dataset):
 
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
-
+size = (128, 128)
 
 train_transform = transforms.Compose(
-    [transforms.Resize((224, 224)), transforms.ToTensor()]
+    [
+        transforms.RandomResizedCrop(128, scale=(0.8, 1.0)),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomVerticalFlip(),
+        transforms.RandomRotation(20),
+        transforms.Resize(size),
+        transforms.ToTensor(),
+        transforms.Normalize(mean, std),
+    ]
 )
 test_transform = transforms.Compose(
-    [transforms.Resize((224, 224)), transforms.ToTensor()]
+    [
+        transforms.CenterCrop(128),
+        transforms.Resize(size),
+        transforms.ToTensor(),
+        transforms.Normalize(mean, std),
+    ]
 )
 train_dataset = ImagenetteData(train_data, transform=train_transform)
 test_dataset = ImagenetteData(test_data, transform=test_transform)
@@ -355,6 +368,7 @@ test_dataloader = DataLoader(
 
 x = next(iter(train_dataloader))
 print(x[0].shape, x[1].shape)
+# show_batch(x, denormalize=Denormalize(mean, std))
 # %%
 
 import torch
@@ -368,12 +382,81 @@ import torch.nn as nn
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
+        self.c1 = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Conv2d(64, 64, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+        )
+        self.c2 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Conv2d(128, 128, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+        )
+        self.c3 = nn.Sequential(
+            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Conv2d(256, 256, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+        )
+        self.c4 = nn.Sequential(
+            nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+        )
+
+        self.flat = nn.Sequential(nn.AdaptiveAvgPool2d(1), nn.Flatten())
+        self.fc = nn.Linear(512, 10)
+
+        # initialize weights
+        nn.init.kaiming_normal_(self.c1[0].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c1[4].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c2[0].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c2[4].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c3[0].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c3[4].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c4[0].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.c4[4].weight, nonlinearity="relu", mode="fan_out")
+        nn.init.kaiming_normal_(self.fc.weight, nonlinearity="linear", mode="fan_out")
+        nn.init.zeros_(self.c1[0].bias)
+        nn.init.zeros_(self.c1[4].bias)
+        nn.init.zeros_(self.c2[0].bias)
+        nn.init.zeros_(self.c2[4].bias)
+        nn.init.zeros_(self.c3[0].bias)
+        nn.init.zeros_(self.c3[4].bias)
+        nn.init.zeros_(self.c4[0].bias)
+        nn.init.zeros_(self.c4[4].bias)
+        nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
+        x = self.c1(x)
+        x = self.c2(x)
+        x = self.c3(x)
+        x = self.c4(x)
+        x = self.flat(x)
+        x = self.fc(x)
         return x
 
 
-Model()(torch.randn(1, 3, 28, 28)).shape
+Model()(torch.randn(2, 3, 28, 28)).shape
 
 # %%
 from torch import optim
