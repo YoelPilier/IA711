@@ -483,23 +483,39 @@ $$
 
 ![bg left:40% width:80%](imagenes/biliupsample.png)
 
-
 $$
 x \leftarrow \text{clamp}(x,0,W_{in}-1),
 \qquad
 y \leftarrow \text{clamp}(y,0,H_{in}-1)
 $$
 
-
 $$
 x_0=\lfloor x \rfloor,\quad y_0=\lfloor y \rfloor
+$$
+
+$$
+x_1=\min(x_0+1,W_{in}-1),
+\qquad
+y_1=\min(y_0+1,H_{in}-1)
 $$
 
 $$
 \alpha=x-x_0,\qquad \beta=y-y_0
 $$
 
-Interpolación: 
+$$
+X_{00}=X[y_0,x_0],
+\qquad
+X_{10}=X[y_0,x_1]
+$$
+
+$$
+X_{01}=X[y_1,x_0],
+\qquad
+X_{11}=X[y_1,x_1]
+$$
+
+Interpolación:
 
 $$
 Y[i,j] =
@@ -509,6 +525,29 @@ Y[i,j] =
 \alpha\beta X_{11}
 $$
 
+---
+
+# Bilinear Upsampling
+
+![bg left:40% width:80%](imagenes/biliupsample.png)
+
+Derivadas locales:
+
+$$
+\frac{\partial Y[i,j]}{\partial X_{00}}=(1-\alpha)(1-\beta)
+$$
+
+$$
+\frac{\partial Y[i,j]}{\partial X_{10}}=\alpha(1-\beta)
+$$
+
+$$
+\frac{\partial Y[i,j]}{\partial X_{01}}=(1-\alpha)\beta
+$$
+
+$$
+\frac{\partial Y[i,j]}{\partial X_{11}}=\alpha\beta
+$$
 
 ---
 
@@ -516,22 +555,34 @@ $$
 
 ![bg left:40% width:80%](imagenes/biliupsample.png)
 
-Derivadas:
+Backward:
 
 $$
-\frac{\partial L}{\partial X_{00}}=(1-\alpha)(1-\beta)\frac{\partial L}{\partial Y}
-$$
-
-$$
-\frac{\partial L}{\partial X_{10}}=\alpha(1-\beta)\frac{\partial L}{\partial Y}
+g=\frac{\partial L}{\partial Y[i,j]}
 $$
 
 $$
-\frac{\partial L}{\partial X_{01}}=(1-\alpha)\beta\frac{\partial L}{\partial Y}
+\frac{\partial L}{\partial X_{00}}
+\mathrel{+}=
+(1-\alpha)(1-\beta)g
 $$
 
 $$
-\frac{\partial L}{\partial X_{11}}=\alpha\beta\frac{\partial L}{\partial Y}
+\frac{\partial L}{\partial X_{10}}
+\mathrel{+}=
+\alpha(1-\beta)g
+$$
+
+$$
+\frac{\partial L}{\partial X_{01}}
+\mathrel{+}=
+(1-\alpha)\beta g
+$$
+
+$$
+\frac{\partial L}{\partial X_{11}}
+\mathrel{+}=
+\alpha\beta g
 $$
 
 ---
