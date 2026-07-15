@@ -597,8 +597,7 @@ Sea:
 - $x$: columna de la salida
 
 $$
-Y_{c,y,x}
-=
+Y_{c,y,x} =
 X_{
 cr^2 + r(y \bmod r) + (x \bmod r),
 \left\lfloor \frac{y}{r} \right\rfloor,
@@ -645,8 +644,7 @@ Y_{
 cr^2 + r(y \bmod r) + (x \bmod r),
 \left\lfloor \frac{y}{r} \right\rfloor,
 \left\lfloor \frac{x}{r} \right\rfloor
-}
-=
+}=
 X_{c,y,x}
 $$
 
