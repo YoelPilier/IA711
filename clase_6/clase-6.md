@@ -587,38 +587,89 @@ $$
 
 ---
 
-# Pixel Shuffle 
+# Pixel Shuffle
 
-![bg  left:40% width:80% ](imagenes/pixelshuffle.png)
+![bg left:40% width:80%](imagenes/pixelshuffle.png)
+
+Sea:
+
+- $y$: fila de la salida
+- $x$: columna de la salida
 
 $$
-Y_{c,rh+i,rw+j} =
-X_{cr^2 + ir + j,h,w}
+Y_{c,y,x}
+=
+X_{
+cr^2 + r(y \bmod r) + (x \bmod r),
+\left\lfloor \frac{y}{r} \right\rfloor,
+\left\lfloor \frac{x}{r} \right\rfloor
+}
+$$
+
+donde:
+
+$$
+0 \leq y < rH,
+\qquad
+0 \leq x < rW
 $$
 
 Derivadas:
 
 $$
-\frac{\partial L}{\partial X_{cr^2 + ir + j,h,w}} =
-\frac{\partial L}{\partial Y_{c,rh+i,rw+j}}
+\frac{
+\partial L
+}{
+\partial X_{
+cr^2 + r(y \bmod r) + (x \bmod r),
+\left\lfloor \frac{y}{r} \right\rfloor,
+\left\lfloor \frac{x}{r} \right\rfloor
+}
+}=
+\frac{\partial L}{\partial Y_{c,y,x}}
 $$
-
 
 ---
+
 # Pixel Unshuffle
 
-![bg  left:40% width:98% ](imagenes/pixelunshuffle.png)
+![bg left:40% width:98%](imagenes/pixelunshuffle.png)
+
+Sea:
+
+- $y$: fila de la entrada
+- $x$: columna de la entrada
 
 $$
-Y_{cr^2 + ir + j,h,w} =
-X_{c,rh+i,rw+j}
+Y_{
+cr^2 + r(y \bmod r) + (x \bmod r),
+\left\lfloor \frac{y}{r} \right\rfloor,
+\left\lfloor \frac{x}{r} \right\rfloor
+}
+=
+X_{c,y,x}
 $$
 
-Derivadas: 
+donde:
 
 $$
-\frac{\partial L}{\partial X_{c,rh+i,rw+j}} =
-\frac{\partial L}{\partial Y_{cr^2 + ir + j,h,w}}
+0 \leq y < rH,
+\qquad
+0 \leq x < rW
+$$
+
+Derivadas:
+
+$$
+\frac{\partial L}{\partial X_{c,y,x}}=\frac{
+\partial L
+}{
+\partial Y_{
+cr^2 + r(y \bmod r) + (x \bmod r),
+\left\lfloor \frac{y}{r} \right\rfloor,
+\left\lfloor \frac{x}{r} \right\rfloor
+}
+}
 $$
 
 ---
