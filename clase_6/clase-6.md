@@ -506,11 +506,11 @@ $$
 $$
 X_{00}=X[y_0,x_0],
 \qquad
-X_{10}=X[y_0,x_1]
+X_{01}=X[y_0,x_1]
 $$
 
 $$
-X_{01}=X[y_1,x_0],
+X_{10}=X[y_1,x_0],
 \qquad
 X_{11}=X[y_1,x_1]
 $$
@@ -520,8 +520,8 @@ Interpolación:
 $$
 Y[i,j] =
 (1-\alpha)(1-\beta)X_{00} +
-\alpha(1-\beta)X_{10} +
-(1-\alpha)\beta X_{01} +
+\alpha(1-\beta)X_{01} +
+(1-\alpha)\beta X_{10} +
 \alpha\beta X_{11}
 $$
 
@@ -538,11 +538,11 @@ $$
 $$
 
 $$
-\frac{\partial Y[i,j]}{\partial X_{10}}=\alpha(1-\beta)
+\frac{\partial Y[i,j]}{\partial X_{01}}=\alpha(1-\beta)
 $$
 
 $$
-\frac{\partial Y[i,j]}{\partial X_{01}}=(1-\alpha)\beta
+\frac{\partial Y[i,j]}{\partial X_{10}}=(1-\alpha)\beta
 $$
 
 $$
@@ -568,13 +568,13 @@ $$
 $$
 
 $$
-\frac{\partial L}{\partial X_{10}}
+\frac{\partial L}{\partial X_{01}}
 \mathrel{+}=
 \alpha(1-\beta)g
 $$
 
 $$
-\frac{\partial L}{\partial X_{01}}
+\frac{\partial L}{\partial X_{10}}
 \mathrel{+}=
 (1-\alpha)\beta g
 $$
