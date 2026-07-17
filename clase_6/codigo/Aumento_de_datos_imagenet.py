@@ -822,12 +822,9 @@ model = Model().to(device)
 # %%
 
 loss_fn = nn.CrossEntropyLoss()
-lr = 1e-2
-wd = 1e-4
-epochs = 10
-optimizer = optim.SGD(
-    model.parameters(), lr=lr, momentum=0.9, nesterov=True, weight_decay=wd
-)
+lr = 1e-3
+epochs = 30
+optimizer = optim.AdamW(model.parameters(), lr=lr)
 # %%
 
 train_loss = []
