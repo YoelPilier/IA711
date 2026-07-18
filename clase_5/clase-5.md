@@ -94,6 +94,8 @@ $$
 - Si $W$ es muy grande, las activaciones también serán muy grandes.
 - Si $W$ es muy pequeño, las activaciones también serán muy pequeñas.
 
+> [torch init](https://docs.pytorch.org/docs/main/nn.init.html)
+
 ---
 
 # 1) Random Initialization
