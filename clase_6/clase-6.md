@@ -454,7 +454,6 @@ $$
 > Christian Darken, John E. Moody. Note on Learning Rate Schedules for Stochastic Optimization. 1990. [Learning Rate Schedules for Stochastic Optimization](https://papers.neurips.cc/paper_files/paper/1990/file/18d8042386b79e2c279fd162df0205c8-Paper.pdf)
 
 ---
-
 # LR Schedulers en PyTorch
 
 ![bg left:40% width:80%](imagenes/lr_scheduler_types.png)
@@ -462,21 +461,30 @@ $$
 ## Familias principales
 
 **Decay fijo:**  
-`StepLR`, `MultiStepLR`, `ExponentialLR`, `PolynomialLR`
+[`StepLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.StepLR.html),
+[`MultiStepLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.MultiStepLR.html),
+[`ExponentialLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ExponentialLR.html),
+[`PolynomialLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.PolynomialLR.html)
 
 **Warmup / transición:**  
-`ConstantLR`, `LinearLR`, `SequentialLR`, `ChainedScheduler`
+[`ConstantLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ConstantLR.html),
+[`LinearLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LinearLR.html),
+[`SequentialLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.SequentialLR.html),
+[`ChainedScheduler`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ChainedScheduler.html)
 
 **Coseno y ciclos:**  
-`CosineAnnealingLR`, `CosineAnnealingWarmRestarts`, `CyclicLR`, `OneCycleLR`
+[`CosineAnnealingLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingLR.html),
+[`CosineAnnealingWarmRestarts`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingWarmRestarts.html),
+[`CyclicLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CyclicLR.html),
+[`OneCycleLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.OneCycleLR.html)
 
 **Adaptativo:**  
-`ReduceLROnPlateau`
+[`ReduceLROnPlateau`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html)
 
 **Personalizados:**  
-`LRScheduler`, `LambdaLR`, `MultiplicativeLR`
-
-> PyTorch Contributors. torch.optim.lr_scheduler. [PyTorch LR Scheduler Documentation](https://docs.pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate)
+[`LRScheduler`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LRScheduler.html),
+[`LambdaLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LambdaLR.html),
+[`MultiplicativeLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.MultiplicativeLR.html)
 
 ---
 
