@@ -451,7 +451,6 @@ $$
 W_{t+1} = W_t - \eta_t \nabla L(W_t)
 $$
 
-> Christian Darken, John E. Moody. Note on Learning Rate Schedules for Stochastic Optimization. 1990. [Learning Rate Schedules for Stochastic Optimization](https://papers.neurips.cc/paper_files/paper/1990/file/18d8042386b79e2c279fd162df0205c8-Paper.pdf)
 
 ---
 # LR Schedulers en PyTorch
