@@ -738,72 +738,117 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 # %%
 import torch.nn as nn
+import torch
 
 
+class Stem(nn.Module):
+    def __init__(self, in_channels=3, out_channels=64):
+        super().__init__()
+        self.conv1 = nn.Conv2d(
+            in_channels, out_channels, kernel_size=7, stride=2, padding=1, bias=False
+        )
+
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU()
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2)
+        nn.init.kaiming_normal_(self.conv1.weight, mode="fan_out", nonlinearity="relu")
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.maxpool(x)
+        return x
+
+
+Stem()(torch.randn(2, 3, 224, 224)).shape
+
+
+# %%
+class ResidualBlock(nn.Module):
+    def __init__(self, in_channels, out_channels, stride=1):
+        super().__init__()
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(
+                in_channels,
+                out_channels,
+                kernel_size=3,
+                stride=stride,
+                padding=1,
+                bias=False,
+            ),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(),
+        )
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(
+                out_channels,
+                out_channels,
+                kernel_size=3,
+                stride=1,
+                padding=1,
+                bias=False,
+            ),
+            nn.BatchNorm2d(out_channels),
+        )
+        self.shortcut = (
+            nn.Identity()
+            if in_channels == out_channels and stride == 1
+            else nn.Sequential(
+                nn.Conv2d(
+                    in_channels, out_channels, kernel_size=1, stride=stride, bias=False
+                ),
+                nn.BatchNorm2d(out_channels),
+            )
+        )
+        self.relu = nn.ReLU()
+        nn.init.kaiming_normal_(
+            self.conv1[0].weight, mode="fan_out", nonlinearity="relu"
+        )
+        nn.init.kaiming_normal_(
+            self.conv2[0].weight, mode="fan_out", nonlinearity="relu"
+        )
+        if not isinstance(self.shortcut, nn.Identity):
+            nn.init.kaiming_normal_(
+                self.shortcut[0].weight, mode="fan_out", nonlinearity="relu"
+            )
+
+    def forward(self, x):
+        identity = x
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x += self.shortcut(identity)
+        return self.relu(x)
+
+
+ResidualBlock(128, 64, 2)(torch.randn(2, 128, 56, 56)).shape
+
+
+# %%
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
-        self.c1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            nn.Dropout(0.1),
-            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            nn.Dropout(0.1),
+        self.stem = Stem()
+        self.l1 = nn.Sequential(ResidualBlock(64, 64), ResidualBlock(64, 64))
+        self.l2 = nn.Sequential(
+            ResidualBlock(64, 128, stride=2), ResidualBlock(128, 128)
         )
-        self.c2 = nn.Sequential(
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.Dropout(0.1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.Dropout(0.1),
+        self.l3 = nn.Sequential(
+            ResidualBlock(128, 256, stride=2), ResidualBlock(256, 256)
         )
-        self.c3 = nn.Sequential(
-            nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-            nn.Dropout(0.1),
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-            nn.Dropout(0.1),
+        self.l4 = nn.Sequential(
+            ResidualBlock(256, 512, stride=2), ResidualBlock(512, 512)
         )
-        self.c4 = nn.Sequential(
-            nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(512),
-            nn.ReLU(),
-            nn.Dropout(0.1),
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(512),
-            nn.ReLU(),
-            nn.Dropout(0.1),
-        )
-
-        self.flat = nn.Sequential(nn.AdaptiveAvgPool2d(1), nn.Flatten())
+        self.flat = nn.Sequential(nn.AdaptiveAvgPool2d((1, 1)), nn.Flatten())
         self.fc = nn.Linear(512, 10)
-
-        # initialize weights
-        nn.init.kaiming_normal_(self.c1[0].weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c1[4].weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c2[0].weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c2[4].weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c3[0].weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c3[4].weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c4[0].weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.c4[4].weight, nonlinearity="relu", mode="fan_out")
-        nn.init.kaiming_normal_(self.fc.weight, nonlinearity="linear", mode="fan_out")
-        nn.init.zeros_(self.fc.bias)
+        nn.init.kaiming_normal_(self.fc.weight, mode="fan_out", nonlinearity="relu")
 
     def forward(self, x):
-        x = self.c1(x)
-        x = self.c2(x)
-        x = self.c3(x)
-        x = self.c4(x)
+        x = self.stem(x)
+        x = self.l1(x)
+        x = self.l2(x)
+        x = self.l3(x)
+        x = self.l4(x)
         x = self.flat(x)
         x = self.fc(x)
         return x
@@ -823,7 +868,7 @@ model = Model().to(device)
 
 loss_fn = nn.CrossEntropyLoss()
 lr = 1e-3
-epochs = 30
+epochs = 100
 optimizer = optim.AdamW(model.parameters(), lr=lr)
 # %%
 
