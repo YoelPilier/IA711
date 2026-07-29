@@ -56,6 +56,13 @@ Si no encuentras una respuesta, entonces abre una nueva issue asegurándote de i
 - Código, error o capturas si aplica  
 - El contexto necesario para poder reproducir la situación  
 
+### Plataformas para desarrollo/entrenamiento de modelos
+
+- [Kaggle](https://www.kaggle.com/) (aproximadamente **30 horas de GPU por semana**; la cuota puede variar).
+- [Google Colab](https://colab.research.google.com/) (sesiones de hasta **12 horas**; el acceso y la cuota de GPU son variables y no están garantizados).
+- [Lightning AI](https://lightning.ai/) (**15 créditos gratuitos al mes**, equivalentes a aproximadamente **80 horas de GPU interrumpible**).
+- [Paperspace Gradient](https://www.paperspace.com/gradient) (sesiones gratuitas de hasta **6 horas**; la versión gratuita es prácticamente imposible de usar debido a la poca disponibilidad).
+- [Modal](https://modal.com/) (requiere configuración mediante su SDK; ofrece **US$30 mensuales en créditos** y permite ejecuciones configurables de hasta **24 horas**).
 
 ### Para los diagramas y dibujos
 
