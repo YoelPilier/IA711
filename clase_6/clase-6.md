@@ -775,3 +775,105 @@ $$
 \Rightarrow
 \mathrm{PSNR} \uparrow
 $$
+
+
+---
+
+# Variational AutoEncoder (VAE)
+
+![bg  left:40% width:80% ](imagenes/vae.png)
+
+$$
+\mu, \log \sigma^2 = f_\theta(x)
+$$
+
+$$
+z \sim \mathcal{N}(\mu, \sigma^2)
+$$
+
+$$
+\hat{x} = g_\phi(z)
+$$
+
+$$
+L =
+\alpha \|x - \hat{x}\|^2
++
+\beta \, D_{KL}\big(q_\theta(z|x)\,\|\,p(z)\big)
+$$
+
+> Diederik P. Kingma, Max Welling. Auto-Encoding Variational Bayes. 2013. [arXiv:1312.6114](https://arxiv.org/abs/1312.6114)
+
+---
+
+# DnCNN
+
+![bg  left:40% width:80% ](imagenes/dcnn.png)
+
+$$
+y = x + n
+$$
+
+$$
+\hat{n} = f_\theta(y)
+$$
+
+$$
+\hat{x} = y - \hat{n}
+$$
+
+$$
+L = \|n - \hat{n}\|_1
+$$
+
+> Kai Zhang, Wangmeng Zuo, Yunjin Chen, Deyu Meng, Lei Zhang. Beyond a Gaussian Denoiser: Residual Learning of Deep CNN for Image Denoising. 2016. [arXiv:1608.03981](https://arxiv.org/abs/1608.03981)
+
+---
+
+# U-Net para reducción de ruido
+
+![bg  left:40% width:80% ](imagenes/unet.png)
+
+$$
+y = x + n
+$$
+
+$$
+\hat{n} = f_\theta(y)
+$$
+
+$$
+\hat{x} = y - \hat{n}
+$$
+
+$$
+L = \|n - \hat{n}\|_1
+$$
+
+> Olaf Ronneberger, Philipp Fischer, Thomas Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation. 2015. [arXiv:1505.04597](https://arxiv.org/abs/1505.04597)
+
+---
+
+# Super-Resolution (SR)
+
+![bg  left:40% width:80% ](imagenes/sr.png)
+
+$$
+x_{LR} = d(x_{HR})
+$$
+
+$$
+\hat{x}_{HR} = f_\theta(x_{LR})
+$$
+
+$$
+L =
+\alpha \|\phi(\hat{x}_{HR}) - \phi(x_{HR})\|^2
++
+\beta \|\hat{x}_{HR} - x_{HR}\|^2
+$$
+
+> Wenzhe Shi, Jose Caballero, Ferenc Huszár, Johannes Totz, Andrew P. Aitken, Rob Bishop, Daniel Rueckert, Zehan Wang. Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network. 2016. [arXiv:1609.05158](https://arxiv.org/abs/1609.05158)
+
+> Justin Johnson, Alexandre Alahi, Li Fei-Fei. Perceptual Losses for Real-Time Style Transfer and Super-Resolution. 2016. [arXiv:1603.08155](https://arxiv.org/abs/1603.08155)
+
