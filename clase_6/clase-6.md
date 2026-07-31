@@ -806,6 +806,34 @@ $$
 
 ---
 
+# GAN
+
+![bg  left:40% width:80% ](imagenes/gan.png)
+
+$$
+z \sim \mathcal{N}(0, I)
+$$
+
+$$
+x_{fake} = G_\theta(z)
+$$
+
+$$
+D_\phi(x) \rightarrow P(\text{real})
+$$
+
+$$
+\min_G \max_D V(D,G) =
+\mathbb{E}_{x}[\log D(x)]+
+\mathbb{E}_{z}[\log(1-D(G(z)))]
+$$
+
+> Ian Goodfellow et al. Generative Adversarial Nets. 2014. [arXiv:1406.2661](https://arxiv.org/abs/1406.2661)
+
+> Alec Radford, Luke Metz, Soumith Chintala. Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks. 2015. [arXiv:1511.06434](https://arxiv.org/abs/1511.06434)
+
+---
+
 # DnCNN
 
 ![bg  left:40% width:80% ](imagenes/dcnn.png)
