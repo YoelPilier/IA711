@@ -32,6 +32,9 @@
     - [Pizarra de la clase 6](./clase_6/clase_6.excalidraw)
     - [Código de ejemplo de la clase 6](./clase_6/codigo)
     - [Ejercicios 4](./ejercicios/Ejercicios_4.md)
+- [Clase 7](https://arxiv.org/abs/1706.03762) - Transformers y modelos de lenguaje
+    - [Pizarra de la clase 7](./clase_7/clase_7.excalidraw)
+    - [Código de ejemplo de la clase 7](./clase_7/codigo)
 
 ## Guías
 
