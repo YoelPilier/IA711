@@ -562,7 +562,7 @@ texto = generar(
 print(texto)
 
 # %%
-lr = 1e-3
+lr = 1e-4
 epochs = 100
 
 optimizer = optim.AdamW(model.parameters(), lr=lr)
