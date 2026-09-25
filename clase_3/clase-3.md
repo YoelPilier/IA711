@@ -33,7 +33,7 @@ El aprendizaje automático o Machine Learning es una rama de la inteligencia art
 
 ---
 
-# Clasificación 
+# Tipos 
 ![bg  left:40% width:96% ](imagenes/clasesmodelos.png)
 
 ---
