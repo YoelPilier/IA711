@@ -352,7 +352,7 @@ for epoch in range(epochs):
         real_loss = loss_fn(real_preds, torch.ones_like(real_preds))
         fake_loss = loss_fn(fake_preds, torch.zeros_like(fake_preds))
         D_loss = (real_loss + fake_loss) / 2
-        accelerator.backward(D_loss, retain_graph=True)
+        accelerator.backward(D_loss)
         D_optimizer.step()
 
         # Train Generator
