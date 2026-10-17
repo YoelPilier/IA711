@@ -2,6 +2,8 @@
 import torch
 
 lr = 0.1
+momentum = 0.9
+epochs = 5000
 
 x = torch.tensor([[0.2, -1], [0, 0.5], [0.3, 0]])
 
@@ -9,8 +11,11 @@ y = torch.tensor([[0.3], [0.5], [0]])
 
 w1 = torch.tensor([[1, 0.3], [2, 0.1]])
 b1 = torch.zeros(2)
-
 w2 = torch.tensor([[0.2], [0.4]])
+
+mw1 = torch.zeros_like(w1)
+mb1 = torch.zeros_like(b1)
+mw2 = torch.zeros_like(w2)
 
 
 # %%
@@ -32,26 +37,35 @@ def dMSE(y_hat, y):
 
 
 # %%
-# forward pass
+for epoch in range(epochs):
+    # forward pass
+    z1 = x @ w1 + b1
+    a1 = sigmoid(z1)
+    y_hat = a1 @ w2
+    loss = MSE(y_hat, y)
+
+    # %%
+    # backward pass
+
+    dloss = dMSE(y_hat, y)
+    dw2 = a1.T @ dloss
+    da1 = dloss @ w2.T
+    dz1 = da1 * dsigmoid(z1)
+    db1 = dz1.sum(dim=0)
+    dw1 = x.T @ dz1
+
+    # step
+    mw1 = mw1 * momentum + lr * dw1
+    mb1 = mb1 * momentum + lr * db1
+    mw2 = mw2 * momentum + lr * dw2
+
+    w1 = w1 - mw1
+    b1 = b1 - mb1
+    w2 = w2 - mw2
+
 z1 = x @ w1 + b1
 a1 = sigmoid(z1)
 y_hat = a1 @ w2
 loss = MSE(y_hat, y)
 print(f"Loss {loss}")
-
-# %%
-# backward pass
-
-dloss = dMSE(y_hat, y)
-dw2 = a1.T @ dloss
-da1 = dloss @ w2.T
-dz1 = da1 * dsigmoid(z1)
-db1 = dz1.sum(dim=0)
-dw1 = x.T @ dz1
-
-# step
-w1 = w1 - lr * dw1
-b1 = b1 - lr * db1
-w2 = w2 - lr * dw2
-
 # %%
