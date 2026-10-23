@@ -141,12 +141,13 @@ y_val_norm_zs = z_score_normalize(data_val_y, mean_y, std_y)
 # z_score_normalize(5, mean_x, std_x)
 # %%
 
+import torch
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # %%
 
 from torch.utils.data import Dataset, DataLoader
-import torch
 
 
 class C2FDataset(Dataset):
