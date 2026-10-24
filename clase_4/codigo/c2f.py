@@ -162,17 +162,24 @@ class C2FDataset(Dataset):
         return self.x[idx], self.y[idx]
 
 
-data_train = C2FDataset(data_train_x, data_train_y)
-data_val = C2FDataset(data_val_x, data_val_y)
+# sin normalización
+
+# data_train = C2FDataset(data_train_x, data_train_y)
+# data_val = C2FDataset(data_val_x, data_val_y)
+
+# con normalización min-max
 
 # data_train = C2FDataset(x_norm_mm, y_norm_mm)
 # data_val = C2FDataset(x_val_norm_mm, y_val_norm_mm)
 
-# data_train = C2FDataset(x_norm_zs, y_norm_zs)
-# data_val = C2FDataset(x_val_norm_zs, y_val_norm_zs)
+# con normalización z-score
+data_train = C2FDataset(x_norm_zs, y_norm_zs)
+data_val = C2FDataset(x_val_norm_zs, y_val_norm_zs)
+
 
 # %%
 import os
+
 
 cpus = os.cpu_count()
 
@@ -205,13 +212,85 @@ class C2FModel(nn.Module):
 
 
 # %%
+
+
+def R_squared(y_true, y_pred):
+    ss_res = torch.sum((y_true - y_pred) ** 2)
+    ss_tot = torch.sum((y_true - torch.mean(y_true)) ** 2)
+    r2 = 1 - (ss_res / ss_tot)
+    return r2
+
+
+# %%
 from torch import optim
 
 
 model = C2FModel().to(device)
 lr = 1e-3
 epochs = 10000
-
+metricas_al = 50
 loss_fn = nn.MSELoss()
+mae = nn.L1Loss()
 
 optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, nesterov=True)
+
+
+# %%
+
+for epoch in range(epochs):
+    model.train()
+    actual_loss = 0.0
+    actual_mae = 0.0
+    actual_r2 = 0.0
+    # entrenamiento
+    for x, y in data_train_loader:
+        x = x.view(-1, 1).to(device)
+        y = y.view(-1, 1).to(device)
+
+        optimizer.zero_grad()
+
+        y_pred = model(x)
+
+        loss = loss_fn(y_pred, y)
+
+        loss.backward()
+
+        optimizer.step()
+
+        actual_loss += loss.item()
+        actual_mae += mae(y_pred, y).item()
+        actual_r2 += R_squared(y, y_pred).item()
+    actual_loss /= len(data_train_loader)
+    actual_mae /= len(data_train_loader)
+    actual_r2 /= len(data_train_loader)
+    if (epoch + 1) % metricas_al == 0 or epoch == 0:
+        print(
+            f"Epoch {epoch + 1}/{epochs},train values, Loss: {actual_loss:.4f}, MAE: {actual_mae:.4f}, R2: {actual_r2:.4f}"
+        )
+
+    model.eval()
+    actual_loss = 0.0
+    actual_mae = 0.0
+    actual_r2 = 0.0
+
+    # validación
+    if (epoch + 1) % metricas_al == 0 or epoch == 0:
+        with torch.no_grad():
+            for x, y in data_val_loader:
+                x = x.view(-1, 1).to(device)
+                y = y.view(-1, 1).to(device)
+
+                y_pred = model(x)
+
+                loss = loss_fn(y_pred, y)
+
+                actual_loss += loss.item()
+                actual_mae += mae(y_pred, y).item()
+                actual_r2 += R_squared(y, y_pred).item()
+
+        print(
+            f"Epoch {epoch + 1}/{epochs},val values, Loss: {actual_loss:.4f}, MAE: {actual_mae:.4f}, R2: {actual_r2:.4f}"
+        )
+
+
+# %%
