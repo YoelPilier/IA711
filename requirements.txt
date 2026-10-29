@@ -3,6 +3,7 @@ ipykernel
 notebook
 pillow
 matplotlib
+pandas
 datasets
 numpy
 torch

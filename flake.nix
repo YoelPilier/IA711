@@ -28,6 +28,7 @@
               notebook
               pillow
               matplotlib
+              pandas
               torch
               numpy
               tqdm
