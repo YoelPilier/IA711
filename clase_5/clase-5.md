@@ -70,7 +70,7 @@ $$ P_i = \frac{1}{1 + e^{-z_i}} $$
 
 Derivada:
 
-$$ \frac{\partial L}{\partial z_i} = p_i - y_i $$
+$$ \frac{\partial L}{\partial z_i} = \frac{p_i - y_i}{N} $$
 
 
 ---
@@ -460,7 +460,7 @@ $$ P_{ij} = \frac{e^{z_{ij}}}{\sum_{k=1}^{C} e^{z_{ik}}} $$
 
 Derivada:
 
-$$ \frac{\partial L}{\partial z_{ij}} = p_{ij} - y_{ij} $$
+$$ \frac{\partial L}{\partial z_{ij}} = \frac{p_{ij} - y_{ij}}{N} $$
 
 --- 
 # Softmax
