@@ -24,6 +24,7 @@ lang: es-ES
 - Entender la relacion entre `Figure` y `Axes`.
 - Crear graficos basicos para explorar y comunicar datos.
 - Personalizar titulos, etiquetas, colores y distribucion.
+- Mostrar un batch de imagenes de MNIST con sus etiquetas.
 - Guardar figuras para reportes o presentaciones.
 
 ---
@@ -162,6 +163,53 @@ plt.show()
 
 ---
 
+# MNIST: obtener un batch de imagenes
+
+```python
+from torch.utils.data import DataLoader
+from torchvision.datasets import MNIST
+from torchvision.transforms import ToTensor
+
+train_data = MNIST(
+    root="./data", train=True, download=True, transform=ToTensor()
+)
+train_loader = DataLoader(train_data, batch_size=16, shuffle=True)
+
+images, labels = next(iter(train_loader))
+print(images.shape)  # (16, 1, 28, 28): batch, canales, alto, ancho
+print(labels.shape)  # (16,): una etiqueta por imagen
+```
+
+- `download=True` descarga MNIST si no esta en `./data`.
+- `ToTensor()` convierte cada imagen a un tensor con valores entre 0 y 1.
+- Un batch agrupa varias imagenes y sus etiquetas para procesarlas juntas.
+
+---
+
+# MNIST: mostrar el batch con Matplotlib
+
+```python
+cols = 4
+rows = (len(images) + cols - 1) // cols
+fig, axes = plt.subplots(rows, cols, figsize=(8, rows * 2), squeeze=False)
+
+for i, ax in enumerate(axes.ravel()):
+    ax.axis("off")
+    if i < len(images):
+        image = images[i].detach().cpu().squeeze(0)
+        ax.imshow(image, cmap="gray", vmin=0, vmax=1)
+        ax.set_title(f"Etiqueta: {labels[i].item()}")
+
+fig.tight_layout()
+plt.show()
+```
+
+- `squeeze(0)` quita el canal unico: `(1, 28, 28)` pasa a `(28, 28)`.
+- `axes.ravel()` permite recorrer la cuadricula; `squeeze=False` funciona tambien con una sola imagen.
+- Los ejes sobrantes quedan ocultos si el batch no llena la cuadricula.
+
+---
+
 # Guardar figuras
 
 ```python
@@ -195,5 +243,6 @@ fig.savefig("grafico.png", dpi=150, bbox_inches="tight")
 6. Carga una imagen en escala de grises y muestrala con `imshow`.
 7. Crea una figura con dos subgraficos comparando train y test.
 8. Exporta un grafico final a PNG con `savefig` y ajusta su resolucion.
+9. Muestra un batch de MNIST con sus etiquetas. Prueba con `batch_size=1`, `10` y `16`.
 
 ---
