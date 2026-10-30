@@ -326,6 +326,81 @@ $$
 
 ---
 
+# Label smoothing: binaria
+
+![bg left:40% width:95%](imagenes/label_smoothing_binaria.png)
+
+$$
+\widetilde y_i=(1-\varepsilon)y_i+\frac{\varepsilon}{2}
+$$
+
+$$
+p_i=\sigma(z_i),\qquad 0\leq\varepsilon\leq1
+$$
+
+$$
+L=-\frac{1}{N}\sum_{i=1}^{N}
+\left[\widetilde y_i\log(p_i)+(1-\widetilde y_i)\log(1-p_i)\right]
+$$
+
+Derivada:
+
+$$
+\frac{\partial L}{\partial z_i}=\frac{p_i-\widetilde y_i}{N}
+$$
+
+---
+
+# Label smoothing: multiclase
+
+![bg left:40% width:95%](imagenes/label_smoothing_multiclase.png)
+
+$$
+\widetilde y_{ij}=(1-\varepsilon)y_{ij}+\frac{\varepsilon}{C}
+$$
+
+$$
+p_{ij}=\frac{e^{z_{ij}}}{\sum_{k=1}^{C}e^{z_{ik}}}
+$$
+
+$$
+L=-\frac{1}{N}\sum_{i=1}^{N}\sum_{j=1}^{C}
+\widetilde y_{ij}\log(p_{ij})
+$$
+
+Derivada:
+
+$$
+\frac{\partial L}{\partial z_{ij}}=\frac{p_{ij}-\widetilde y_{ij}}{N}
+$$
+
+---
+
+# Label smoothing: multietiqueta
+
+![bg left:40% width:95%](imagenes/label_smoothing_multietiqueta.png)
+
+$$
+\widetilde y_{ij}=(1-\varepsilon)y_{ij}+\frac{\varepsilon}{2}
+$$
+
+$$
+p_{ij}=\sigma(z_{ij})
+$$
+
+$$
+L=-\frac{1}{NC}\sum_{i=1}^{N}\sum_{j=1}^{C}
+\left[\widetilde y_{ij}\log(p_{ij})+(1-\widetilde y_{ij})\log(1-p_{ij})\right]
+$$
+
+Derivada:
+
+$$
+\frac{\partial L}{\partial z_{ij}}=\frac{p_{ij}-\widetilde y_{ij}}{NC}
+$$
+
+---
+
 # Aumento de Datos
 
 ![bg  left:40% width:80% ](imagenes/aumentodatos.png)
