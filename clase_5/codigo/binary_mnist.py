@@ -91,41 +91,113 @@ labels = labels[:8]
 # %%
 import torch
 from torch import nn
+from torch.nn import init
+from torchmetrics.classification import BinaryAccuracy
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-class BinaryMNISTModel(nn.Module):
+# Version con sigmoide
+class SigmoidBinaryMNISTModel(nn.Module):
     def __init__(self):
-        super(BinaryMNISTModel, self).__init__()
+        super(SigmoidBinaryMNISTModel, self).__init__()
         self.l1 = nn.Linear(28 * 28, 128, bias=True)
+        self.l1norm = nn.LayerNorm(128)
         self.a1 = nn.Sigmoid()
         self.l2 = nn.Linear(128, 64, bias=True)
+        self.l2norm = nn.LayerNorm(64)
         self.a2 = nn.Sigmoid()
-        self.l3 = nn.Linear(64, 1)
+        self.l3 = nn.Linear(64, 32, bias=True)
+        self.l3norm = nn.LayerNorm(32)
         self.a3 = nn.Sigmoid()
-        # self.l4 = nn.Linear(32, 1)
+        self.l4 = nn.Linear(32, 1)
+
+        # uniform
+        # init.xavier_uniform_(self.l1.weight)
+        # init.zeros_(self.l1.bias)
+        # init.xavier_uniform_(self.l2.weight)
+        # init.zeros_(self.l2.bias)
+        # init.xavier_uniform_(self.l3.weight)
+        # init.zeros_(self.l3.bias)
+        # init.xavier_uniform_(self.l4.weight)
+
+        # normal
+
+        init.xavier_normal_(self.l1.weight)
+        init.zeros_(self.l1.bias)
+        init.xavier_normal_(self.l2.weight)
+        init.zeros_(self.l2.bias)
+        init.xavier_normal_(self.l3.weight)
+        init.zeros_(self.l3.bias)
+        init.xavier_normal_(self.l4.weight)
 
     def forward(self, x):
         x = x.reshape(x.size(0), -1)
         x = self.l1(x)
+        x = self.l1norm(x)
         x = self.a1(x)
         x = self.l2(x)
+        x = self.l2norm(x)
         x = self.a2(x)
         x = self.l3(x)
-        # x = self.a3(x)
-        # x = self.l4(x)
+        x = self.l3norm(x)
+        x = self.a3(x)
+        x = self.l4(x)
+        return x
+
+
+# Modelo con ReLU
+class BinaryMNISTModel(nn.Module):
+    def __init__(self):
+        super(BinaryMNISTModel, self).__init__()
+        self.l1 = nn.Linear(28 * 28, 128, bias=True)
+        self.l1norm = nn.LayerNorm(128)
+        self.a1 = nn.ReLU()
+        self.l2 = nn.Linear(128, 64, bias=True)
+        self.l2norm = nn.LayerNorm(64)
+        self.a2 = nn.ReLU()
+        self.l3 = nn.Linear(64, 32, bias=True)
+        self.l3norm = nn.LayerNorm(32)
+        self.a3 = nn.ReLU()
+        self.l4 = nn.Linear(32, 1)
+
+        # normal
+        init.kaiming_normal_(self.l1.weight, nonlinearity="relu")
+        init.zeros_(self.l1.bias)
+        init.kaiming_normal_(self.l2.weight, nonlinearity="relu")
+        init.zeros_(self.l2.bias)
+        init.kaiming_normal_(self.l3.weight, nonlinearity="relu")
+        init.zeros_(self.l3.bias)
+        init.kaiming_normal_(self.l4.weight, nonlinearity="linear")
+
+    def forward(self, x):
+        x = x.reshape(x.size(0), -1)
+        x = self.l1(x)
+        x = self.l1norm(x)
+        x = self.a1(x)
+        x = self.l2(x)
+        x = self.l2norm(x)
+        x = self.a2(x)
+        x = self.l3(x)
+        x = self.l3norm(x)
+        x = self.a3(x)
+        x = self.l4(x)
         return x
 
 
 BinaryMNISTModel()(torch.randn(1, 1, 28, 28)).shape
 
 # %%
+import utils
 
 epochs = 20
 lr = 1e-3
 
 model = BinaryMNISTModel().to(device)
+# model = SigmoidBinaryMNISTModel().to(device)
+# monitor = utils.ModelMonitor(model)
+
+accuracy_metric = BinaryAccuracy().to(device)
 Loss = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, nesterov=True)
 
@@ -140,7 +212,9 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
         train_loss += loss.item()
-
+        # monitor.step()
+        # break
+    # break
     train_loss /= len(train_loader)
 
     model.eval()
@@ -153,7 +227,7 @@ for epoch in range(epochs):
             loss = Loss(outputs, labels)
             test_loss += loss.item()
             preds = torch.sigmoid(outputs) >= 0.5
-            correct += (preds == labels).sum().item()
+            correct += accuracy_metric(preds, labels.int()).item()
 
     test_loss /= len(test_loader)
     accuracy = correct / len(test_loader)
@@ -162,3 +236,4 @@ for epoch in range(epochs):
         f"Epoch [{epoch + 1}/{epochs}], Train Loss: {train_loss:.4f}, Test Loss: {test_loss:.4f}, Accuracy: {accuracy:.4f}"
     )
 # %%
+# monitor.report()
