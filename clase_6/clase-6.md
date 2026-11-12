@@ -183,7 +183,7 @@ $$
 G_{i,j,c}
 \mathbf{1}
 \left[
-(h,w)=\operatorname*{argmax}_{(u,v)\in R_{i,j}}X_{u,v,c}
+(h,w)=\mathrm{argmax}_{(u,v)\in R_{i,j}}X_{u,v,c}
 \right]
 $$
 
@@ -530,35 +530,20 @@ $$
 ---
 # LR Schedulers en PyTorch
 
-![bg left:40% width:80%](imagenes/lr_scheduler_types.png)
+![bg left:28% width:80%](imagenes/lr_scheduler_types.png)
 
-## Familias principales
+<style scoped>
+h1 { font-size: 32px; margin-bottom: 20px; }
+table { display: table; width: 100%; table-layout: fixed; font-size: 22px; line-height: 1.4; margin: 0; }
+thead { display: none; }
+td { width: 50%; vertical-align: top; padding: 14px 16px; overflow-wrap: anywhere; }
+td strong { display: inline-block; margin-bottom: 8px; }
+</style>
 
-**Decay fijo:**  
-[`StepLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.StepLR.html),
-[`MultiStepLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.MultiStepLR.html),
-[`ExponentialLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ExponentialLR.html),
-[`PolynomialLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.PolynomialLR.html)
-
-**Warmup / transición:**  
-[`ConstantLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ConstantLR.html),
-[`LinearLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LinearLR.html),
-[`SequentialLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.SequentialLR.html),
-[`ChainedScheduler`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ChainedScheduler.html)
-
-**Coseno y ciclos:**  
-[`CosineAnnealingLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingLR.html),
-[`CosineAnnealingWarmRestarts`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingWarmRestarts.html),
-[`CyclicLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CyclicLR.html),
-[`OneCycleLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.OneCycleLR.html)
-
-**Adaptativo:**  
-[`ReduceLROnPlateau`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html)
-
-**Personalizados:**  
-[`LRScheduler`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LRScheduler.html),
-[`LambdaLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LambdaLR.html),
-[`MultiplicativeLR`](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.MultiplicativeLR.html)
+| | |
+| --- | --- |
+| **Decay fijo**<br>[StepLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.StepLR.html)<br>[MultiStepLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.MultiStepLR.html)<br>[ExponentialLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ExponentialLR.html)<br>[PolynomialLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.PolynomialLR.html) | **Warmup / transición**<br>[ConstantLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ConstantLR.html)<br>[LinearLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LinearLR.html)<br>[SequentialLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.SequentialLR.html)<br>[ChainedScheduler](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ChainedScheduler.html) |
+| **Coseno y ciclos**<br>[CosineAnnealingLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingLR.html)<br>[CosineAnnealingWarmRestarts](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CosineAnnealingWarmRestarts.html)<br>[CyclicLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.CyclicLR.html)<br>[OneCycleLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.OneCycleLR.html) | **Adaptativo / personalizados**<br>[ReduceLROnPlateau](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html)<br>[LRScheduler](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LRScheduler.html)<br>[LambdaLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.LambdaLR.html)<br>[MultiplicativeLR](https://docs.pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.MultiplicativeLR.html) |
 
 ---
 
