@@ -121,7 +121,7 @@ Las redes neuronales artificiales (ANN) son modelos computacionales inspirados e
 $$y = \text{sign}\left( \sum_{i=1}^{n} w_i x_i + b \right)$$
 
 **mlp**:
-$$a^{(l)} = \sigma\left( W^{(l)} a^{(l-1)} + b^{(l)} \right)$$
+$$a^{(l)} = \sigma\left( a^{(l-1)} W^{(l)} + b^{(l)} \right)$$
 
 **función de activación**:
 $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
@@ -168,16 +168,16 @@ $$f(x) = x^2 \implies f'(x) = 2x$$
 ![bg  left:30% width:96% ](imagenes/gradientes.png)
 
 **Error en la salida ($\delta$):**
-$$\delta = \frac{2}{n}(\hat{y} - y) \cdot \sigma'(z)$$
+$$\delta = \frac{2}{n}(\hat{y} - y) \odot \sigma'(z)$$
 
 **Derivada de la Sigmoide:**
 $$\sigma'(z) = \sigma(z)(1 - \sigma(z))$$
 
 **Gradientes de los parámetros:**
-**Pesos:** $\frac{\partial L}{\partial W} = \delta \cdot x$
+**Pesos:** $\frac{\partial L}{\partial W} = x^T\delta$
 
 **Sesgo:** $\frac{\partial L}{\partial b} = \delta$
-**Entrada:** $\frac{\partial L}{\partial x} = \delta \cdot W$
+**Entrada:** $\frac{\partial L}{\partial x} = \delta W^T$
 
 ---
 # Gradientes Matriciales

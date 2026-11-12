@@ -57,16 +57,16 @@ data_val_y = [-143.5, -62.5, 27.5, 72.5, 117.5, 162.5, 207.5, -8.5, 54.5, 90.5]
 ![bg  left:40% width:96% ](imagenes/procesamiento_datos.png)
 
 - Normalización Min-Max
-$$x' = \frac{x - x_{min}}{x_{max} - x_{min}}$$
+$$x' = \frac{x - x_{min}}{\max(x_{max} - x_{min},\varepsilon)},\quad\varepsilon>0$$
 
 - Desnormalización Min-Max
-$$x = x' (x_{max} - x_{min}) + x_{min}$$
+$$x = x'\max(x_{max} - x_{min},\varepsilon) + x_{min}$$
 
 - Normalización Z-Score
-$$x' = \frac{x - \mu}{\sigma}$$
+$$x' = \frac{x - \mu}{\max(\sigma,\varepsilon)}$$
 
 - Desnormalización Z-Score
-$$x = x' \sigma + \mu$$
+$$x = x'\max(\sigma,\varepsilon) + \mu$$
 
 
 --- 
@@ -131,7 +131,7 @@ $$\text{ReLU}'(x) = \begin{cases} 0 & \text{si } x < 0 \\ 1 & \text{si } x > 0 \
 $$MSE = \frac{1}{n} \sum_{i=1}^{n} ( \hat{y}_i-y_i)^2$$
 
 - Derivada de MSE
-$$\text{MSE}' = \frac{2}{n}(\hat{y} - y)$$
+$$\frac{\partial L_{MSE}}{\partial\hat y_i} = \frac{2}{n}(\hat{y}_i - y_i)$$
 
 ---
 
@@ -141,8 +141,8 @@ SGD with momentum and nesterov
 
 ![bg  left:40% width:96% ](imagenes/optimizador.png)
 
-$$v = \mu v - \eta \nabla L(\theta + \mu v)$$
-$$\theta = \theta + v$$
+$$v_{t+1} = \mu v_t + \eta \nabla L(\theta_t - \mu v_t)$$
+$$\theta_{t+1} = \theta_t - v_{t+1}$$
 - Learning rate : $\eta$ = 1e-3
 - Momentum : $\mu$ = 0.9
 - Nesterov : True
@@ -160,7 +160,7 @@ $$MAE = \frac{1}{n} \sum_{i=1}^{n} |\hat{y}_i - y_i|$$
 
 
 - MAE derivada
-$$\text{MAE}' = \frac{1}{n}\cdot\text{sign}(\hat{y} - y)$$
+$$\frac{\partial L_{MAE}}{\partial\hat y_i} = \frac{1}{n}\text{sign}(\hat{y}_i - y_i)$$
 
 donde:
 
@@ -181,7 +181,7 @@ $$
 
 - R² (Coeficiente de determinación)
 
-$$R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}$$
+$$R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2},\quad\sum_i(y_i-\bar y)^2>0$$
 
 ---
 

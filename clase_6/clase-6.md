@@ -438,9 +438,7 @@ $$
 
 $$
 \hat{m}_t = \frac{m_t}{1 - \beta_1^t}
-$$
-
-$$
+\qquad
 \hat{v}_t = \frac{v_t}{1 - \beta_2^t}
 $$
 
@@ -456,7 +454,7 @@ $$
 \alpha = 10^{-3}, \beta_1 = 0.9, \beta_2 = 0.999, \epsilon = 10^{-8}, \lambda = 0
 $$
 
-> Diederik P. Kingma, Jimmy Ba. Adam: A Method for Stochastic Optimization. 2014. [arXiv:1412.6980](https://arxiv.org/abs/1412.6980)
+> Kingma y Ba (2014). [Adam](https://arxiv.org/abs/1412.6980).
 
 ---
 # Decoupled Weight Decay Regularization (AdamW)
@@ -478,9 +476,7 @@ $$
 
 $$
 \hat{m}_t = \frac{m_t}{1 - \beta_1^t}
-$$
-
-$$
+\qquad
 \hat{v}_t = \frac{v_t}{1 - \beta_2^t}
 $$
 
@@ -496,7 +492,7 @@ $$
 \alpha = 10^{-3}, \beta_1 = 0.9, \beta_2 = 0.999, \epsilon = 10^{-8}, \lambda = 0.01
 $$
 
-> Ilya Loshchilov, Frank Hutter. Decoupled Weight Decay Regularization. 2017. [arXiv:1711.05101](https://arxiv.org/abs/1711.05101)
+> Loshchilov y Hutter (2017). [AdamW](https://arxiv.org/abs/1711.05101).
 ---
 
 # Deep Residual Networks (ResNet)
@@ -961,7 +957,7 @@ L =
 \beta \Vert \hat{x}_{HR} - x_{HR}\Vert ^2
 $$
 
-> Wenzhe Shi, Jose Caballero, Ferenc Huszár, Johannes Totz, Andrew P. Aitken, Rob Bishop, Daniel Rueckert, Zehan Wang. Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network. 2016. [arXiv:1609.05158](https://arxiv.org/abs/1609.05158)
+> Shi et al. (2016). [Sub-Pixel CNN](https://arxiv.org/abs/1609.05158).
 
-> Justin Johnson, Alexandre Alahi, Li Fei-Fei. Perceptual Losses for Real-Time Style Transfer and Super-Resolution. 2016. [arXiv:1603.08155](https://arxiv.org/abs/1603.08155)
+> Johnson et al. (2016). [Perceptual Losses](https://arxiv.org/abs/1603.08155).
 

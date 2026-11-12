@@ -66,7 +66,7 @@ y_i \log(p_i)
 \right)
 $$
 
-$$ P_i = \frac{1}{1 + e^{-z_i}} $$
+$$ p_i = \frac{1}{1 + e^{-z_i}} $$
 
 Derivada:
 
@@ -101,7 +101,7 @@ $$
 # 1) Random Initialization
 
 $$
-W \sim \mathcal{N}(0,1)\,\epsilon
+W_{ij}\sim\mathcal{N}(0,\varepsilon^2),\qquad\varepsilon>0
 $$
 
 ![bg left:40% width:90%](imagenes/randominit.png)
@@ -137,8 +137,8 @@ W \sim \mathcal{U}\left(
 \right)
 $$
 
-- Diseñada para mantener aproximadamente constante la varianza de las activaciones entre capas.
-- Recomendada para funciones de activación simétricas como **tanh** y **sigmoid**.
+- Mantiene aproximadamente la varianza entre capas.
+- Recomendada para **tanh** y **sigmoid**.
 
 ---
 
@@ -147,18 +147,18 @@ $$
 ![bg left:40% width:90%](imagenes/kaimingheinit.png)
 
 $$
-W \sim \mathcal{N}\left(0,\frac{2}{n_{in}}\right)
+W \sim \mathcal{N}\left(0,\frac{2}{(1+a^2)n_{in}}\right),\quad a=0\ \text{en ReLU}
 $$
 
 $$
 W \sim \mathcal{U}\left(
--\sqrt{\frac{6}{n_{in}}},
-\sqrt{\frac{6}{n_{in}}}
+-\sqrt{\frac{6}{(1+a^2)n_{in}}},
+\sqrt{\frac{6}{(1+a^2)n_{in}}}
 \right)
 $$
 
-- Diseñada para mantener aproximadamente constante la varianza de las activaciones en redes con **ReLU** y sus variantes.
-- Recomendada para **ReLU**, **Leaky ReLU**, **PReLU**, **GELU** y similares.
+- Conserva aproximadamente la varianza con **ReLU** y sus variantes.
+- **Leaky ReLU / PReLU**: $a$ es la pendiente negativa.
 
 ---
 # Normalización en Redes Neuronales
@@ -181,30 +181,24 @@ $$
 
 $$
 \hat{x}_i=\frac{x_i-\mu_B}{\sqrt{\sigma_B^2+\varepsilon}}
-$$
-
-$$
+\qquad
 y_i=\gamma\hat{x}_i+\beta
 $$
 
-- Calcula la media y la varianza usando el **mini-batch**.
+- Media y varianza del **mini-batch**.
 - Muy utilizada en CNN.
-- Su rendimiento disminuye cuando el batch es muy pequeño.
+- Menos eficaz con batches pequeños.
 
 ---
-### Derivada de Batch Normalization</summary>
+### Derivada de Batch Normalization
 
-Sea
-
-$$
-\delta_i=\frac{\partial L}{\partial y_i}
-$$
+Sea $\delta_i=\frac{\partial L}{\partial y_i}$.
 
 La derivada respecto a la entrada es
 
 $$
 \frac{\partial L}{\partial x_i}
-= \frac{\gamma}{m\sqrt{\sigma^2+\epsilon}}
+= \frac{\gamma}{m\sqrt{\sigma_B^2+\varepsilon}}
 \left[
 m\delta_i - \sum_j\delta_j - \hat{x}_i
 \sum_j
@@ -216,9 +210,7 @@ Además,
 $$
 \frac{\partial L}{\partial\gamma}
 = \sum_i\delta_i\hat{x}_i
-$$
-
-$$
+\qquad
 \frac{\partial L}{\partial\beta}
 =\sum_i\delta_i
 $$
@@ -242,39 +234,36 @@ $$
 
 $$
 \hat{x}=\frac{x-\mu}{\sqrt{\sigma^2+\varepsilon}}
+\qquad
+y=\gamma\odot\hat{x}+\beta
 $$
 
-$$
-y=\gamma\hat{x}+\beta
-$$
-
-- Calcula la media y la varianza para **cada muestra individual**.
+- Media y varianza por **muestra**.
 - No depende del tamaño del batch.
-- Es la normalización estándar en Transformers.
+- Estándar en Transformers.
 
 ---
 
 ### Derivada de Layer Normalization
 
 $$
-\frac{\partial L}{\partial x_i} = \frac{\gamma}{d\sqrt{\sigma^2+\epsilon}}
+\frac{\partial L}{\partial x_i} = \frac{1}{d\sqrt{\sigma^2+\varepsilon}}
 \left[
-d\delta_i - \sum_j\delta_j - \hat{x}_i
+d\gamma_i\delta_i - \sum_j\gamma_j\delta_j - \hat{x}_i
 \sum_j
-\delta_j\hat{x}_j \right]
+\gamma_j\delta_j\hat{x}_j \right]
 $$
 
 $$
-\frac{\partial L}{\partial\gamma} =
-\sum_i\delta_i\hat{x}_i
+\frac{\partial L}{\partial\gamma_i} =
+\sum_n\delta_{n,i}\hat{x}_{n,i}
 $$
 
 $$
-\frac{\partial L}{\partial\beta} = \sum_i\delta_i
+\frac{\partial L}{\partial\beta_i} = \sum_n\delta_{n,i}
 $$
 
-> Las sumas se realizan sobre las características de una única muestra.
-</details>
+> Entrada: características de una muestra. Parámetros: batch.
 
 ---
 
@@ -282,52 +271,48 @@ $$
 
 ![bg left:40% width:90%](imagenes/groupnorm.png)
 
-Si existen $G$ grupos de canales,
-
 $$
-\mu_g=\frac{1}{m}\sum_{i\in g}x_i
+\mu_g=\frac{1}{m_g}\sum_{i\in g}x_i
 $$
 
 $$
-\sigma_g^2=\frac{1}{m}\sum_{i\in g}(x_i-\mu_g)^2
+\sigma_g^2=\frac{1}{m_g}\sum_{i\in g}(x_i-\mu_g)^2
 $$
 
 $$
 \hat{x}=\frac{x-\mu_g}{\sqrt{\sigma_g^2+\varepsilon}}
+\qquad
+y=\gamma\odot\hat{x}+\beta
 $$
 
-$$
-y=\gamma\hat{x}+\beta
-$$
-
-- Divide los canales en grupos.
-- Cada grupo se normaliza de manera independiente.
-- Funciona muy bien con batches pequeños.
+- $G$ grupos de canales, $m_g=\frac{C}{G}HW$.
+- Normaliza cada grupo por separado.
+- Funciona con batches pequeños.
 
 ---
 
 ### Derivada de Group Normalization
 
 $$
-\frac{\partial L}{\partial x_i} = \frac{\gamma}{m_g\sqrt{\sigma_g^2+\epsilon}}
+\frac{\partial L}{\partial x_i} = \frac{1}{m_g\sqrt{\sigma_g^2+\varepsilon}}
 \left[
-m_g\delta_i -
-\sum_j\delta_j - \hat{x}_i
-\sum_j
-\delta_j\hat{x}_j
+m_g\gamma_i\delta_i -
+\sum_{j\in g}\gamma_j\delta_j - \hat{x}_i
+\sum_{j\in g}
+\gamma_j\delta_j\hat{x}_j
 \right]
 $$
 
 $$
-\frac{\partial L}{\partial\gamma} = \sum_i\delta_i\hat{x}_i
+\frac{\partial L}{\partial\gamma_c} = \sum_{n,h,w}\delta_{n,c,h,w}\hat{x}_{n,c,h,w}
 $$
 
 $$
-\frac{\partial L}{\partial\beta} =
-\sum_i\delta_i
+\frac{\partial L}{\partial\beta_c} =
+\sum_{n,h,w}\delta_{n,c,h,w}
 $$
 
-> Las sumas se realizan únicamente sobre los elementos del grupo.
+> Entrada: elementos del grupo. Parámetros: batch y posiciones espaciales, por canal.
 
 ---
 
@@ -337,17 +322,17 @@ $$
 
 $$
 \text{RMS}(x)
-= \sqrt{\frac1d\sum_{i=1}^{d}x_i^2}
+= \sqrt{\frac1d\sum_{i=1}^{d}x_i^2+\varepsilon}
 $$
 
 $$
 \hat{x} =
 \frac{x}
-{\text{RMS}(x)+\varepsilon}
+{\text{RMS}(x)}
 $$
 
 $$
-y=\gamma\hat{x}
+y=\gamma\odot\hat{x}
 $$
 
 - No calcula la media.
@@ -362,32 +347,26 @@ $$
 Sea
 
 $$
-R=\sqrt{\frac1d\sum_i x_i^2+\epsilon}
-$$
-
-La salida es
-
-$$
-y=\gamma\frac{x}{R}
+R=\sqrt{\frac1d\sum_i x_i^2+\varepsilon}
+\qquad
+y=\gamma\odot\frac{x}{R}
 $$
 
 La derivada respecto a la entrada es
 
 $$
 \frac{\partial L}{\partial x} =
-\frac{\gamma}{R} \left(
+\frac{1}{R} \left(
 I- \frac{xx^T}{dR^2} \right)
-\delta
+(\gamma\odot\delta)
 $$
 
-Además,
-
 $$
-\frac{\partial L}{\partial\gamma}
-= \sum_i\delta_i\hat{x}_i
+\frac{\partial L}{\partial\gamma_i}
+= \sum_n\delta_{n,i}\hat{x}_{n,i}
 $$
 
-> RMSNorm no requiere derivar la media ni la varianza, por lo que su backward es más simple.
+> Backward más simple: no deriva la media ni la varianza.
 
 
 ---
@@ -397,31 +376,29 @@ $$
 ![bg left:40% width:90%](imagenes/instancenorm.png)
 
 $$
-\mu_c=\frac1{HW}\sum x_{cij}
+\mu_c=\frac1{HW}\sum_{h,w}x_{c,h,w}
 $$
 
 $$
-\sigma_c^2=\frac1{HW}\sum(x_{cij}-\mu_c)^2
+\sigma_c^2=\frac1{HW}\sum_{h,w}(x_{c,h,w}-\mu_c)^2
 $$
 
 $$
-\hat{x}=\frac{x-\mu_c}{\sqrt{\sigma_c^2+\epsilon}}
+\hat{x}=\frac{x-\mu_c}{\sqrt{\sigma_c^2+\varepsilon}}
+\qquad
+y=\gamma_c\hat{x}+\beta_c
 $$
 
-$$
-y=\gamma\hat{x}+\beta
-$$
-
-- Normaliza cada canal de cada imagen por separado.
+- Normaliza cada canal por imagen.
 - Muy utilizada en Style Transfer y GANs.
-- Equivale a GroupNorm cuando \(G=C\).
+- Equivale a GroupNorm cuando $G=C$.
 
 ---
 
 ### Derivada de Instance Normalization
 
 $$
-\frac{\partial L}{\partial x_i} = \frac{\gamma}{HW\sqrt{\sigma_c^2+\epsilon}}
+\frac{\partial L}{\partial x_i} = \frac{\gamma_c}{HW\sqrt{\sigma_c^2+\varepsilon}}
 \left[
 HW\delta_i - \sum_j\delta_j -
 \hat{x}_i
@@ -431,13 +408,13 @@ HW\delta_i - \sum_j\delta_j -
 $$
 
 $$
-\frac{\partial L}{\partial\gamma}
-= \sum_i\delta_i\hat{x}_i
+\frac{\partial L}{\partial\gamma_c}
+= \sum_{n,h,w}\delta_{n,c,h,w}\hat{x}_{n,c,h,w}
 $$
 
 $$
-\frac{\partial L}{\partial\beta} =
-\sum_i\delta_i
+\frac{\partial L}{\partial\beta_c} =
+\sum_{n,h,w}\delta_{n,c,h,w}
 $$
 
 > Cada imagen y cada canal se derivan de forma independiente.
@@ -456,7 +433,7 @@ $$
 
 $$ L = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} y_{ij} \log(p_{ij}) $$
 
-$$ P_{ij} = \frac{e^{z_{ij}}}{\sum_{k=1}^{C} e^{z_{ik}}} $$
+$$ p_{ij} = \frac{e^{z_{ij}}}{\sum_{k=1}^{C} e^{z_{ik}}} $$
 
 Derivada:
 
