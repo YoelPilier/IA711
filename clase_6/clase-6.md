@@ -22,7 +22,7 @@ lang: es-ES
 
 ![bg  left:40% width:98% ](imagenes/convolucion.png)
 
-$$(I * K)(i, j) = \sum_{m=0}^{M} \sum_{n=0}^{N} I(i + m, j + n) K(m, n)$$
+$$(I*K)(i,j)=Y(i,j) = \sum_{m=0}^{K_h-1} \sum_{n=0}^{K_w-1} I(iS_h+mD_h-P_h,jS_w+nD_w-P_w)K(m,n)$$
 
 $$
 H_{out} =
@@ -66,7 +66,7 @@ $$
 ![bg  left:40% width:98% ](imagenes/convoluciont.png)
 
 $$
-O(iS_h+aD_h-P_h,\;jS_w+bD_w-P_w)
+O(iS_h+aD_h-P_h,jS_w+bD_w-P_w)
 \mathrel{+}=
 I(i,j)K(a,b)
 $$
@@ -117,7 +117,7 @@ $$
 - Convolución:
 
 $$
-\frac{\partial L}{\partial X} = \text{ConvTranspose}
+\frac{\partial L}{\partial X} = \text{ConvTranspose}_{S,P,D}^{\mathrm{shape}(X)}
 \left(
 \frac{\partial L}{\partial Y},
 W
@@ -125,22 +125,22 @@ W
 $$
 
 $$
-\frac{\partial L}{\partial W} = X * 
-\frac{\partial L}{\partial Y}
+\frac{\partial L}{\partial W_{a,b}} =
+\sum_{i,j}\frac{\partial L}{\partial Y_{i,j}}
+X_{iS_h+aD_h-P_h,jS_w+bD_w-P_w}
 $$
 
 - Convolución Transpuesta:
 
 $$
-\frac{\partial L}{\partial X} =
-\frac{\partial L}{\partial Y} *
-W
+\frac{\partial L}{\partial X} = \text{Conv}_{S,P,D}^{\mathrm{shape}(X)}
+\left(\frac{\partial L}{\partial Y},W\right)
 $$
 
 $$
-\frac{\partial L}{\partial W} =
-X_{\uparrow} *
-\frac{\partial L}{\partial Y}
+\frac{\partial L}{\partial W_{a,b}} =
+\sum_{i,j}X_{i,j}
+\frac{\partial L}{\partial Y_{iS_h+aD_h-P_h,jS_w+bD_w-P_w}}
 $$
 
 --- 
@@ -183,7 +183,7 @@ $$
 G_{i,j,c}
 \mathbf{1}
 \left[
-X_{h,w,c}=Y_{i,j,c}
+(h,w)=\operatorname*{argmax}_{(u,v)\in R_{i,j}}X_{u,v,c}
 \right]
 $$
 
@@ -208,8 +208,8 @@ $$
 $$
 
 $$
-dX =
-\frac{dY}{K_HK_W}
+dX_{h,w,c}\mathrel{+}=\frac{dY_{i,j,c}}{|R_{i,j}|},
+\qquad(h,w)\in R_{i,j}
 $$
 
 --- 
@@ -256,7 +256,7 @@ input image → convolutional layer(n) → pooling layer → fully connected lay
 
 ![bg  left:40% width:98% ](imagenes/Dropout.png)
 
-$$ q = 1 - p $$
+$$ q = 1 - p,\qquad 0\leq p<1 $$
 
 $$
 m \sim \text{Bernoulli}(q)
@@ -294,7 +294,7 @@ $$
 **Función de pérdida:**
 
 $$
-\mathcal{L}*{total} = \mathcal{L}*{data} + \frac{\lambda}{2}\sum_i w_i^2
+\mathcal{L}_{total} = \mathcal{L}_{data} + \frac{\lambda}{2}\sum_i w_i^2
 $$
 
 **Derivada de la penalización:**
@@ -429,11 +429,11 @@ g_t =
 $$
 
 $$
-m_t = \beta_1 m_{t-1} + (1 - \beta_1)g_t
+m_t = \beta_1 m_{t-1} + (1 - \beta_1)g_t,\qquad m_0=0
 $$
 
 $$
-v_t = \beta_2 v_{t-1} + (1 - \beta_2)g_t^2
+v_t = \beta_2 v_{t-1} + (1 - \beta_2)g_t^2,\qquad v_0=0
 $$
 
 $$
@@ -453,7 +453,7 @@ $$
 $$
 
 $$
-\alpha = 1E^{-3}, \beta_1 = 0.9, \beta_2 = 0.999, \epsilon = 10^{-8}, \lambda = 0
+\alpha = 10^{-3}, \beta_1 = 0.9, \beta_2 = 0.999, \epsilon = 10^{-8}, \lambda = 0
 $$
 
 > Diederik P. Kingma, Jimmy Ba. Adam: A Method for Stochastic Optimization. 2014. [arXiv:1412.6980](https://arxiv.org/abs/1412.6980)
@@ -469,11 +469,11 @@ g_t = \nabla_{\theta} L_t(\theta_{t-1})
 $$
 
 $$
-m_t = \beta_1 m_{t-1} + (1 - \beta_1)g_t
+m_t = \beta_1 m_{t-1} + (1 - \beta_1)g_t,\qquad m_0=0
 $$
 
 $$
-v_t = \beta_2 v_{t-1} + (1 - \beta_2)g_t^2
+v_t = \beta_2 v_{t-1} + (1 - \beta_2)g_t^2,\qquad v_0=0
 $$
 
 $$
@@ -493,7 +493,7 @@ $$
 $$
 
 $$
-\alpha = 1E^{-3}, \beta_1 = 0.9, \beta_2 = 0.999, \epsilon = 10^{-8}, \lambda = 0.01
+\alpha = 10^{-3}, \beta_1 = 0.9, \beta_2 = 0.999, \epsilon = 10^{-8}, \lambda = 0.01
 $$
 
 > Ilya Loshchilov, Frank Hutter. Decoupled Weight Decay Regularization. 2017. [arXiv:1711.05101](https://arxiv.org/abs/1711.05101)
@@ -504,7 +504,7 @@ $$
 ![bg  left:40% width:80% ](imagenes/resnet.png)
 
 $$
-y = F(x, \{W_i\}) + x
+y = F(x, \lbrace W_i\rbrace ) + W_sx
 $$
 
 
@@ -568,15 +568,15 @@ $$
 ![bg  left:40% width:80% ](imagenes/nearestupsample.png)
 
 $$
-Y_{c, rh+i, rw+j} = X_{c,h,w}
+Y_{c, r_hh+i, r_ww+j} = X_{c,h,w}
 $$
 
 Derivadas:
 
 $$\frac{\partial L}{\partial X_{c,h,w}} =
-\sum_{i=0}^{r-1}
-\sum_{j=0}^{r-1}
-\frac{\partial L}{\partial Y_{c,rh+i,rw+j}}
+\sum_{i=0}^{r_h-1}
+\sum_{j=0}^{r_w-1}
+\frac{\partial L}{\partial Y_{c,r_hh+i,r_ww+j}}
 $$
 
 --- 
@@ -590,9 +590,9 @@ $$
 Con `align_corners=True`:
 
 $$
-x = j\frac{W_{in}-1}{W_{out}-1},
+x = j\frac{W_{in}-1}{\max(W_{out}-1,1)},
 \qquad
-y = i\frac{H_{in}-1}{H_{out}-1}
+y = i\frac{H_{in}-1}{\max(H_{out}-1,1)}
 $$
 
 Con `align_corners=False`:
@@ -812,7 +812,7 @@ $$
 $$
 
 $$
-L = \|x - \hat{x}\|^2
+L = \frac{1}{NCHW}\Vert x - \hat{x}\Vert _F^2
 $$
 
 ---
@@ -823,9 +823,9 @@ $$
 
 $$
 \mathrm{MSE}
-= \frac{1}{N}
-\sum_i
-(X_i-\hat{X}_i)^2
+= \frac{1}{CHW}
+\sum_{c,h,w}
+(X_{c,h,w}-\hat{X}_{c,h,w})^2
 $$
 
 $$
@@ -839,16 +839,16 @@ $$
 $$
 MAX_I =
 \begin{cases}
-1, & \text{imagen normalizada} \\
+1, & \text{rango }[0,1] \\
 255, & \text{imagen de 8 bits}
 \end{cases}
 $$
 
 
 $$
-\mathrm{MSE} \downarrow
+\mathrm{MSE}\to0^+
 \Rightarrow
-\mathrm{PSNR} \uparrow
+\mathrm{PSNR}\to+\infty
 $$
 
 
@@ -863,7 +863,7 @@ $$
 $$
 
 $$
-z \sim \mathcal{N}(\mu, \sigma^2)
+z=\mu+\sigma\odot\xi,\qquad \xi\sim\mathcal{N}(0,I)
 $$
 
 $$
@@ -872,9 +872,9 @@ $$
 
 $$
 L =
-\alpha \|x - \hat{x}\|^2
+\alpha \Vert x - \hat{x}\Vert ^2
 +
-\beta \, D_{KL}\big(q_\theta(z|x)\,\|\,p(z)\big)
+\beta  D_{KL}\big(q_\theta(z|x)\Vert \mathcal{N}(0,I)\big)
 $$
 
 > Diederik P. Kingma, Max Welling. Auto-Encoding Variational Bayes. 2013. [arXiv:1312.6114](https://arxiv.org/abs/1312.6114)
@@ -894,13 +894,13 @@ x_{fake} = G_\theta(z)
 $$
 
 $$
-D_\phi(x) \rightarrow P(\text{real})
+D_\phi(x) = P_\phi(\text{real}\mid x)
 $$
 
 $$
 \min_G \max_D V(D,G) =
-\mathbb{E}_{x}[\log D(x)]+
-\mathbb{E}_{z}[\log(1-D(G(z)))]
+\mathbb{E}_{x\sim p_{data}}[\log D(x)]+
+\mathbb{E}_{z\sim p_z}[\log(1-D(G(z)))]
 $$
 
 > Ian Goodfellow et al. Generative Adversarial Nets. 2014. [arXiv:1406.2661](https://arxiv.org/abs/1406.2661)
@@ -926,7 +926,7 @@ $$
 $$
 
 $$
-L = \|n - \hat{n}\|_1
+L = \frac{1}{2N}\sum_{i=1}^{N}\Vert n_i - \hat{n}_i\Vert _F^2
 $$
 
 > Kai Zhang, Wangmeng Zuo, Yunjin Chen, Deyu Meng, Lei Zhang. Beyond a Gaussian Denoiser: Residual Learning of Deep CNN for Image Denoising. 2016. [arXiv:1608.03981](https://arxiv.org/abs/1608.03981)
@@ -950,7 +950,7 @@ $$
 $$
 
 $$
-L = \|n - \hat{n}\|_1
+L = \frac{1}{NCHW}\Vert n - \hat{n}\Vert _1
 $$
 
 > Olaf Ronneberger, Philipp Fischer, Thomas Brox. U-Net: Convolutional Networks for Biomedical Image Segmentation. 2015. [arXiv:1505.04597](https://arxiv.org/abs/1505.04597)
@@ -971,9 +971,9 @@ $$
 
 $$
 L =
-\alpha \|\phi(\hat{x}_{HR}) - \phi(x_{HR})\|^2
+\alpha \Vert \phi(\hat{x}_{HR}) - \phi(x_{HR})\Vert ^2
 +
-\beta \|\hat{x}_{HR} - x_{HR}\|^2
+\beta \Vert \hat{x}_{HR} - x_{HR}\Vert ^2
 $$
 
 > Wenzhe Shi, Jose Caballero, Ferenc Huszár, Johannes Totz, Andrew P. Aitken, Rob Bishop, Daniel Rueckert, Zehan Wang. Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network. 2016. [arXiv:1609.05158](https://arxiv.org/abs/1609.05158)
