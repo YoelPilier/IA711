@@ -111,11 +111,14 @@ class MNISTModel(nn.Module):
             nn.BatchNorm2d(256),
             nn.ReLU(),
         )
+        self.fc = nn.Linear(256, 10)
+
         nn.init.kaiming_normal_(self.l1[0].weight, mode="fan_out", nonlinearity="relu")
         nn.init.kaiming_normal_(self.l2[0].weight, mode="fan_out", nonlinearity="relu")
         nn.init.kaiming_normal_(self.l3[0].weight, mode="fan_out", nonlinearity="relu")
 
-        self.fc = nn.Linear(256, 10)
+        nn.init.kaiming_normal_(self.fc.weight, mode="fan_out", nonlinearity="linear")
+        nn.init.constant_(self.fc.bias, 0)
 
     def forward(self, x):
         x = self.l1(x)
