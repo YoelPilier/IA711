@@ -100,31 +100,43 @@ class MNISTModel(nn.Module):
             nn.Conv2d(1, 64, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
+            nn.Dropout2d(0.1),
         )
         self.l2 = nn.Sequential(
             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(),
+            nn.Dropout2d(0.1),
         )
         self.l3 = nn.Sequential(
             nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU(),
+            nn.Dropout2d(0.1),
         )
-        self.fc = nn.Linear(256, 10)
+
+        self.l4 = nn.Sequential(
+            nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(),
+            nn.Dropout2d(0.1),
+        )
+        self.flatten = nn.Sequential(nn.AdaptiveAvgPool2d((1, 1)), nn.Flatten())
+        self.fc = nn.Linear(512, 10)
 
         nn.init.kaiming_normal_(self.l1[0].weight, mode="fan_out", nonlinearity="relu")
         nn.init.kaiming_normal_(self.l2[0].weight, mode="fan_out", nonlinearity="relu")
         nn.init.kaiming_normal_(self.l3[0].weight, mode="fan_out", nonlinearity="relu")
 
-        nn.init.kaiming_normal_(self.fc.weight, mode="fan_out", nonlinearity="linear")
+        nn.init.kaiming_normal_(self.fc.weight, mode="fan_in", nonlinearity="linear")
         nn.init.constant_(self.fc.bias, 0)
 
     def forward(self, x):
         x = self.l1(x)
         x = self.l2(x)
         x = self.l3(x)
-        x = torch.mean(x, dim=[2, 3])
+        x = self.l4(x)
+        x = self.flatten(x)
         x = self.fc(x)
         return x
 
@@ -143,9 +155,13 @@ lr = 2e-3
 accuracy_metric = Accuracy(task="multiclass", num_classes=10).to(device)
 
 Loss = nn.CrossEntropyLoss()
+# stochastic gradient descent with momentum and weight decay
+# optimizer = torch.optim.SGD(
+# model.parameters(), lr=lr, momentum=0.9, nesterov=True, weight_decay=1e-3
+# )
 
-optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, nesterov=True)
-
+# AdamW
+optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-3)
 
 train_losses = []
 test_losses = []
